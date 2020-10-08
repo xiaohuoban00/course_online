@@ -1,7 +1,7 @@
 <template>
   <div>
     <p>
-      <button @click="list()" class="btn btn-white btn-default btn-round">
+      <button @click="list(1)" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-refresh"></i>
         刷新
       </button>
@@ -77,11 +77,16 @@
       </tr>
       </tbody>
     </table>
+    <p style="float: right;margin-right: 20px">
+      <pagination ref="pagination" v-bind:list="list"></pagination>
+    </p>
   </div>
 </template>
 
 <script>
+import Pagination from "@/components/pagination";
 export default {
+  components:{Pagination},
   name: "chapter",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
@@ -92,17 +97,17 @@ export default {
   mounted() {
     let _this = this;
     //_this.$parent.activeSidebar("business-chapter-sidebar");
-    _this.list();
+    _this.list(1);
   },
   methods: {
-    list() {
+    list(page) {
       let _this = this;
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/findAll', {
-        page: 1,
-        size: 10
+        page: page,
+        size: _this.$refs.pagination.size//$refs获取子组件
       }).then((response) => {
-        console.log(response)
         _this.chapters = response.data.list
+        _this.$refs.pagination.render(page,response.data.total)
       })
     }
   }
