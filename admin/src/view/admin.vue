@@ -13,7 +13,7 @@
         </button>
 
         <div class="navbar-header pull-left">
-          <router-link to="/welcome" class="navbar-brand">
+          <router-link to=" /welcome" class="navbar-brand">
             <small>
               <i class="fa fa-leaf"></i>
               在线视频教程总后台
@@ -543,7 +543,21 @@
 export default {
   name: "admin",
   mounted: function () {
-
+    let _this = this;
+    _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar")
+  },
+  //用于监听Vue实例中数据的变动
+  watch:{
+    $route:{
+      handler:function (val, oldVal){
+        console.log("-----页面跳转",val,oldVal);
+        let _this = this;
+        //页面加载完成后执行
+        _this.$nextTick(function (){
+          _this.activeSidebar(_this.$route.name.replace("/","-")+"-sidebar")
+        })
+      }
+    }
   },
   methods:{
     /**
