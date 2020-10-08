@@ -1,75 +1,83 @@
 <template>
-  <table id="simple-table" class="table  table-bordered table-hover">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>名称</th>
-      <th>课程ID</th>
-      <th>操作</th>
-    </tr>
-    </thead>
+  <div>
+    <p>
+      <button @click="list()" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-refresh"></i>
+        刷新
+      </button>
+    </p>
+    <table id="simple-table" class="table  table-bordered table-hover">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>课程ID</th>
+        <th>操作</th>
+      </tr>
+      </thead>
 
-    <tbody>
-    <tr v-for="(chapter,i) in chapters" :key="i">
-      <td>{{chapter.id}}</td>
-      <td>{{chapter.name}}</td>
-      <td>{{chapter.courseId}}</td>
-      <td>
-        <div class="hidden-sm hidden-xs btn-group">
-          <button class="btn btn-xs btn-success">
-            <i class="ace-icon fa fa-check bigger-120"></i>
-          </button>
-
-          <button class="btn btn-xs btn-info">
-            <i class="ace-icon fa fa-pencil bigger-120"></i>
-          </button>
-
-          <button class="btn btn-xs btn-danger">
-            <i class="ace-icon fa fa-trash-o bigger-120"></i>
-          </button>
-
-          <button class="btn btn-xs btn-warning">
-            <i class="ace-icon fa fa-flag bigger-120"></i>
-          </button>
-        </div>
-
-        <div class="hidden-md hidden-lg">
-          <div class="inline pos-rel">
-            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-              <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+      <tbody>
+      <tr v-for="(chapter,i) in chapters" :key="i">
+        <td>{{ chapter.id }}</td>
+        <td>{{ chapter.name }}</td>
+        <td>{{ chapter.courseId }}</td>
+        <td>
+          <div class="hidden-sm hidden-xs btn-group">
+            <button class="btn btn-xs btn-success">
+              <i class="ace-icon fa fa-check bigger-120"></i>
             </button>
 
-            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-              <li>
-                <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+            <button class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-pencil bigger-120"></i>
+            </button>
+
+            <button class="btn btn-xs btn-danger">
+              <i class="ace-icon fa fa-trash-o bigger-120"></i>
+            </button>
+
+            <button class="btn btn-xs btn-warning">
+              <i class="ace-icon fa fa-flag bigger-120"></i>
+            </button>
+          </div>
+
+          <div class="hidden-md hidden-lg">
+            <div class="inline pos-rel">
+              <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+              </button>
+
+              <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                <li>
+                  <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
 																			<span class="blue">
 																				<i class="ace-icon fa fa-search-plus bigger-120"></i>
 																			</span>
-                </a>
-              </li>
+                  </a>
+                </li>
 
-              <li>
-                <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                <li>
+                  <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
 																			<span class="green">
 																				<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
 																			</span>
-                </a>
-              </li>
+                  </a>
+                </li>
 
-              <li>
-                <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                <li>
+                  <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
 																			<span class="red">
 																				<i class="ace-icon fa fa-trash-o bigger-120"></i>
 																			</span>
-                </a>
-              </li>
-            </ul>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 
 <script>
@@ -78,7 +86,7 @@ export default {
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
     return {
-      chapters: [ ]
+      chapters: []
     }
   },
   mounted() {
@@ -89,9 +97,12 @@ export default {
   methods: {
     list() {
       let _this = this;
-      _this.$ajax.get('http://127.0.0.1:9000/business/admin/chapter/findAll').then((response) => {
+      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/findAll', {
+        page: 1,
+        size: 10
+      }).then((response) => {
         console.log(response)
-        _this.chapters = response.data
+        _this.chapters = response.data.list
       })
     }
   }
