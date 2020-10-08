@@ -976,7 +976,17 @@
 export default {
   name:"chapter",
   mounted() {
-    //this.$parent.activeSidebar("business-chapter-sidebar");
+    let _this = this;
+    //_this.$parent.activeSidebar("business-chapter-sidebar");
+    _this.list();
+  },
+  methods:{
+    list(){
+      let _this = this;
+      _this.$ajax.get('http://127.0.0.1:9000/business/admin/chapter/findAll').then((response)=>{
+        console.log(response)
+      })
+    }
   }
 }
 </script>
