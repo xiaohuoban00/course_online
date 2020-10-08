@@ -1,19 +1,17 @@
-package com.zmq.business;
+package com.course.system;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.context.annotation.ComponentScan;
 import tk.mybatis.spring.annotation.MapperScan;
 
-/**
- * @author zmq
- * @date 2020/10/8 2:58 下午
- */
 @SpringBootApplication
 @EnableEurekaClient
-@MapperScan("com.zmq.server.mapper")
-public class BusinessApplication {
+@MapperScan("com.course.server.mapper")
+@ComponentScan("com.course")
+public class SystemApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BusinessApplication.class,args);
+        SpringApplication.run(SystemApplication.class,args);
     }
 }

@@ -1,6 +1,6 @@
-package com.zmq.server.mapper;
+package com.course.server.mapper;
 
-import com.zmq.server.domain.Chapter;
+import com.course.server.domain.Chapter;
 import tk.mybatis.mapper.common.Mapper;
 
 /**
