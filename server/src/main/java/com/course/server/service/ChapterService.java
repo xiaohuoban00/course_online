@@ -23,7 +23,7 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    public void findAll(PageDto pageDto) {
+    public void list(PageDto<ChapterDto> pageDto) {
         Example example = new Example(Chapter.class);
         example.orderBy("id").desc();
         PageHelper.startPage(pageDto.getPage(),pageDto.getSize());

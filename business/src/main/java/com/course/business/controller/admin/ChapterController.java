@@ -6,7 +6,7 @@ import com.course.server.service.ChapterService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
+
 
 /**
  * @author zmq
@@ -19,9 +19,9 @@ public class ChapterController {
     @Resource
     private ChapterService chapterService;
 
-    @PostMapping("findAll")
-    public PageDto findAll(@RequestBody PageDto pageDto){
-        chapterService.findAll(pageDto);
+    @PostMapping("list")
+    public PageDto<ChapterDto> list(@RequestBody PageDto<ChapterDto> pageDto){
+        chapterService.list(pageDto);
         return pageDto;
     }
 }

@@ -1,27 +1,63 @@
 <template>
   <div>
     <p>
+      <button @click="add()" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-edit"></i>
+        新增
+      </button>
+      &nbsp;
       <button @click="list(1)" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-refresh"></i>
         刷新
       </button>
     </p>
+    <div class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">新增课程分类</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="col-sm-2 control-label">名称</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" placeholder="名称">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">课程ID</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" placeholder="课程ID">
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary">保存</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
-      <tr>
-        <th>ID</th>
-        <th>名称</th>
-        <th>课程ID</th>
-        <th>操作</th>
+      <tr class="center">
+        <th class="center">ID</th>
+        <th class="center">名称</th>
+        <th class="center">课程ID</th>
+        <th class="center">操作</th>
       </tr>
       </thead>
 
       <tbody>
       <tr v-for="(chapter,i) in chapters" :key="i">
-        <td>{{ chapter.id }}</td>
-        <td>{{ chapter.name }}</td>
-        <td>{{ chapter.courseId }}</td>
-        <td>
+        <td class="center">{{ chapter.id }}</td>
+        <td class="center">{{ chapter.name }}</td>
+        <td class="center">{{ chapter.courseId }}</td>
+        <td class="center">
           <div class="hidden-sm hidden-xs btn-group">
             <button class="btn btn-xs btn-success">
               <i class="ace-icon fa fa-check bigger-120"></i>
@@ -85,8 +121,9 @@
 
 <script>
 import Pagination from "@/components/pagination";
+
 export default {
-  components:{Pagination},
+  components: {Pagination},
   name: "chapter",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
@@ -100,14 +137,18 @@ export default {
     _this.list(1);
   },
   methods: {
+    add() {
+      let _this = this;
+      $(".modal").modal("show")
+    },
     list(page) {
       let _this = this;
-      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/findAll', {
+      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
         page: page,
-        size: _this.$refs.pagination.size//$refs获取子组件
+        size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
         _this.chapters = response.data.list
-        _this.$refs.pagination.render(page,response.data.total)
+        _this.$refs.pagination.render(page, response.data.total)
       })
     }
   }

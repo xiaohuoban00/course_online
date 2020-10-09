@@ -512,7 +512,7 @@
         <div class="footer-inner">
           <div class="footer-content">
 						<span class="bigger-120">
-							<span class="blue bolder">Ace</span>
+							<span class="blue bolder">zmq</span>
 							在线视频教程总后台 &copy; 2020
 						</span>
             <span class="action-buttons">
