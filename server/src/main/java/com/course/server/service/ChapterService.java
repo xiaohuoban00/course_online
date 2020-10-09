@@ -6,10 +6,12 @@ import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
+import com.course.server.utils.ValidatorUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
@@ -23,6 +25,7 @@ import java.util.List;
  * @date 2020/10/8 3:32 下午
  */
 @Service
+@Transactional
 public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;

@@ -22,6 +22,16 @@ public class ResponseDto {
      */
     private Object content;
 
+    public ResponseDto(boolean success, String code, String message, Object content) {
+        this.success = success;
+        this.code = code;
+        this.message = message;
+        this.content = content;
+    }
+
+    public ResponseDto() {
+    }
+
     public String getCode() {
         return code;
     }

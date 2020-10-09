@@ -103,19 +103,21 @@ export default {
       _this.chapter = {};
       $("#form-modal").modal("show")
     },
-    edit(chapter){
+    edit(chapter) {
       let _this = this
-      _this.chapter = $.extend({},chapter)
+      _this.chapter = $.extend({}, chapter)
       $("#form-modal").modal("show")
     },
-    del(id){
+    del(id) {
       let _this = this;
-      Confirm.show("删除后不可恢复，确认删除?",function(){
-        _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response)=>{
+      Confirm.show("删除后不可恢复，确认删除?", function () {
+        _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/" + id).then((response) => {
           let resp = response.data
-          if(resp.success){
+          if (resp.success) {
             _this.list(1)
-            Toast.success("删除成功 ")
+            Toast.success("删除成功")
+          }else {
+            Toast.error(resp.message)
           }
         })
       })
@@ -135,16 +137,20 @@ export default {
     },
     save() {
       let _this = this;
+      if (!Validator.require(_this.chapter.name, "名称")
+          || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
+        return;
+      }
       Loading.show();
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter).then((response) => {
         let resp = response.data
         Loading.hide();
-        if(resp.success){
+        if (resp.success) {
           $("#form-modal").modal("hide");
           _this.list(1)
           Toast.success("保存成功")
-        }else {
-          Toast.error("保存失败")
+        } else {
+          Toast.warning(resp.message)
         }
       })
     }
