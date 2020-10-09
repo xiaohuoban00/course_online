@@ -110,19 +110,24 @@ export default {
     },
     del(id){
       let _this = this;
-      _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response)=>{
-        let resp = response.data
-        if(resp.success){
-          _this.list(1)
-        }
+      Confirm.show("删除后不可恢复，确认删除?",function(){
+        _this.$ajax.delete("http://127.0.0.1:9000/business/admin/chapter/delete/"+id).then((response)=>{
+          let resp = response.data
+          if(resp.success){
+            _this.list(1)
+            Toast.success("删除成功 ")
+          }
+        })
       })
     },
     list: function (page) {
       let _this = this;
+      Loading.show();
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
         page: page,
         size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
+        Loading.hide();
         let resp = response.data
         _this.chapters = resp.content.list
         _this.$refs.pagination.render(page, resp.content.total)
@@ -130,11 +135,16 @@ export default {
     },
     save() {
       let _this = this;
+      Loading.show();
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter).then((response) => {
         let resp = response.data
+        Loading.hide();
         if(resp.success){
           $("#form-modal").modal("hide");
           _this.list(1)
+          Toast.success("保存成功")
+        }else {
+          Toast.error("保存失败")
         }
       })
     }
