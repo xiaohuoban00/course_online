@@ -35,4 +35,10 @@ public class ChapterController {
         responseDto.setContent(chapterDto);
         return responseDto;
     }
+
+    @DeleteMapping("delete/{id}")
+    public ResponseDto delete(@PathVariable String id){
+        chapterService.delete(id);
+        return new ResponseDto();
+    }
 }

@@ -65,4 +65,12 @@ public class ChapterService {
     private void update(Chapter chapter){
         chapterMapper.updateByPrimaryKeySelective(chapter);
     }
+
+    /**
+     * 删除分类
+     * @param id
+     */
+    public void delete(String id) {
+        chapterMapper.deleteByPrimaryKey(id);
+    }
 }
