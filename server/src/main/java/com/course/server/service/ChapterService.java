@@ -4,6 +4,7 @@ import com.course.server.domain.Chapter;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
+import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -24,27 +25,30 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
+    /**
+     * 查询列表
+     *
+     * @param pageDto
+     */
     public void list(PageDto<ChapterDto> pageDto) {
         Example example = new Example(Chapter.class);
         example.orderBy("id").desc();
-        PageHelper.startPage(pageDto.getPage(),pageDto.getSize());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         List<Chapter> chapterList = chapterMapper.selectByExample(example);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
         pageDto.setTotal(pageInfo.getTotal());
-        List<ChapterDto> chapterDtoList = new ArrayList<>();
-        ChapterDto chapterDto;
-        for (Chapter chapter : chapterList) {
-            chapterDto = new ChapterDto();
-            BeanUtils.copyProperties(chapter, chapterDto);
-            chapterDtoList.add(chapterDto);
-        }
+        List<ChapterDto> chapterDtoList = CopyUtil.copyList(chapterList, ChapterDto.class);
         pageDto.setList(chapterDtoList);
     }
 
-    public void save(ChapterDto chapterDto){
+    /**
+     * 新增大章
+     *
+     * @param chapterDto
+     */
+    public void save(ChapterDto chapterDto) {
         chapterDto.setId(UuidUtil.getShortUuid());
-        Chapter chapter = new Chapter();
-        BeanUtils.copyProperties(chapterDto, chapter);
+        Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
         chapterMapper.insert(chapter);
     }
 }

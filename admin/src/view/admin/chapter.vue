@@ -11,7 +11,7 @@
         刷新
       </button>
     </p>
-    <div class="modal fade" tabindex="-1" role="dialog">
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -139,22 +139,27 @@ export default {
   },
   methods: {
     add() {
-      $(".modal").modal("show")
+      $("#form-modal").modal("show")
     },
-    list(page) {
+    list: function (page) {
       let _this = this;
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/list', {
         page: page,
         size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
-        _this.chapters = response.data.list
-        _this.$refs.pagination.render(page, response.data.total)
+        let resp = response.data
+        _this.chapters = resp.content.list
+        _this.$refs.pagination.render(page, resp.content.total)
       })
     },
     save() {
       let _this = this;
       _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter).then((response) => {
-
+        let resp = response.data
+        if(resp.success){
+          $("#form-modal").modal("hide");
+          _this.list(1)
+        }
       })
     }
   }
