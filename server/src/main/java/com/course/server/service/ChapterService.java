@@ -10,6 +10,8 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -42,13 +44,25 @@ public class ChapterService {
     }
 
     /**
-     * 新增大章
+     * 新增大章如果存在则更新
      *
      * @param chapterDto
      */
     public void save(ChapterDto chapterDto) {
-        chapterDto.setId(UuidUtil.getShortUuid());
         Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
+        if(StringUtils.isEmpty(chapterDto.getId())){
+            insert(chapter);
+        }else {
+            update(chapter);
+        }
+    }
+
+    private void insert(Chapter chapter){
+        chapter.setId(UuidUtil.getShortUuid());
         chapterMapper.insert(chapter);
+    }
+
+    private void update(Chapter chapter){
+        chapterMapper.updateByPrimaryKeySelective(chapter);
     }
 }
