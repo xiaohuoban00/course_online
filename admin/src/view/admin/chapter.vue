@@ -24,20 +24,20 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" placeholder="名称">
+                  <input type="text" v-model="chapter.name" class="form-control" placeholder="名称">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">课程ID</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" placeholder="课程ID">
+                  <input type="text" v-model="chapter.courseId" class="form-control" placeholder="课程ID">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-primary">保存</button>
+            <button type="button" class="btn btn-primary" @click="save()">保存</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -128,6 +128,7 @@ export default {
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
     return {
+      chapter: {},
       chapters: []
     }
   },
@@ -138,7 +139,6 @@ export default {
   },
   methods: {
     add() {
-      let _this = this;
       $(".modal").modal("show")
     },
     list(page) {
@@ -149,6 +149,12 @@ export default {
       }).then((response) => {
         _this.chapters = response.data.list
         _this.$refs.pagination.render(page, response.data.total)
+      })
+    },
+    save() {
+      let _this = this;
+      _this.$ajax.post('http://127.0.0.1:9000/business/admin/chapter/save', _this.chapter).then((response) => {
+
       })
     }
   }
