@@ -7,6 +7,7 @@ import freemarker.template.Template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.util.Map;
 
 /**
  * @author zmq
@@ -25,10 +26,10 @@ public class FreemarkerUtil {
         template = configuration.getTemplate(ftlName);
     }
 
-    public static void generator(String fileName) throws Exception{
+    public static void generator(String fileName, Map<String,Object> map) throws Exception{
         FileWriter fileWriter = new FileWriter(fileName);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        template.process(null,bufferedWriter);
+        template.process(map,bufferedWriter);
         bufferedWriter.flush();
         fileWriter.close();
     }
