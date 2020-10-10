@@ -1,9 +1,10 @@
-package com.course.server.service;
+package com.course.server.service.impl;
 
 import com.course.server.domain.Chapter;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
+import com.course.server.service.IChapterService;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -21,16 +22,11 @@ import java.util.List;
  * @date 2020/10/8 3:32 下午
  */
 @Service
-@Transactional
-public class ChapterService {
+public class ChapterService implements IChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    /**
-     * 查询列表
-     *
-     * @param pageDto
-     */
+    @Override
     public void list(PageDto<ChapterDto> pageDto) {
         Example example = new Example(Chapter.class);
         example.orderBy("id").desc();
@@ -42,11 +38,9 @@ public class ChapterService {
         pageDto.setList(chapterDtoList);
     }
 
-    /**
-     * 新增大章如果存在则更新
-     *
-     * @param chapterDto
-     */
+
+    @Override
+    @Transactional
     public void save(ChapterDto chapterDto) {
         Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
         if (StringUtils.isEmpty(chapterDto.getId())) {
@@ -65,11 +59,9 @@ public class ChapterService {
         chapterMapper.updateByPrimaryKeySelective(chapter);
     }
 
-    /**
-     * 删除分类
-     *
-     * @param id
-     */
+
+    @Override
+    @Transactional
     public void delete(String id) {
         chapterMapper.deleteByPrimaryKey(id);
     }

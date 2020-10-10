@@ -2,6 +2,9 @@ package com.course.server.domain;
 
 import javax.persistence.Id;
 
+/**
+ * 大章
+ */
 public class Chapter {
     @Id
     private String id;
