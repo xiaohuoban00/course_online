@@ -6,18 +6,14 @@ import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
-import com.course.server.utils.ValidatorUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,24 +49,25 @@ public class ChapterService {
      */
     public void save(ChapterDto chapterDto) {
         Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
-        if(StringUtils.isEmpty(chapterDto.getId())){
+        if (StringUtils.isEmpty(chapterDto.getId())) {
             insert(chapter);
-        }else {
+        } else {
             update(chapter);
         }
     }
 
-    private void insert(Chapter chapter){
+    private void insert(Chapter chapter) {
         chapter.setId(UuidUtil.getShortUuid());
         chapterMapper.insert(chapter);
     }
 
-    private void update(Chapter chapter){
+    private void update(Chapter chapter) {
         chapterMapper.updateByPrimaryKeySelective(chapter);
     }
 
     /**
      * 删除分类
+     *
      * @param id
      */
     public void delete(String id) {
