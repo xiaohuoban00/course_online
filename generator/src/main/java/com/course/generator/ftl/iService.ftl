@@ -3,10 +3,7 @@ package com.course.server.service;
 import com.course.server.dto.${Domain}Dto;
 import com.course.server.dto.PageDto;
 
-/**
- * @author zmq
- * @date 2020/10/10 5:58 下午
- */
+
 public interface I${Domain}Service {
 
     /**
