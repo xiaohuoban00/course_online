@@ -52,7 +52,7 @@ public class ChapterService implements IChapterService {
 
     private void insert(Chapter chapter) {
         chapter.setId(UuidUtil.getShortUuid());
-        chapterMapper.insert(chapter);
+        chapterMapper.insertSelective(chapter);
     }
 
     private void update(Chapter chapter) {

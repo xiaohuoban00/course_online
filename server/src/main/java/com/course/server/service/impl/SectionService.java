@@ -49,7 +49,7 @@ public class SectionService implements ISectionService {
 
     private void insert(Section section) {
         section.setId(UuidUtil.getShortUuid());
-        sectionMapper.insert(section);
+        sectionMapper.insertSelective(section);
     }
 
     private void update(Section section) {

@@ -19,9 +19,11 @@ public class ServerGenerator {
     public static void main(String[] args) throws Exception{
         String Domain = "Section";
         String domain = "section";
+        String module = "business";
         Map<String,Object> map = new HashMap<>();
         map.put("Domain",Domain);
         map.put("domain",domain);
+        map.put("module",module);
 
         FreemarkerUtil.initConfig("iService.ftl");
         FreemarkerUtil.generator(toServicePath+"I"+Domain+"Service.java",map);
