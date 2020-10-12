@@ -1,6 +1,9 @@
 <template>
   <div>
-    <h3>{{course.name}}</h3>
+    <h4 class="lighter">
+      <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
+      <router-link to="/business/course" class="pink"> {{course.name}} </router-link>
+    </h4>
     <p>
       <router-link to="/business/course" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-arrow-left"></i>
@@ -66,12 +69,15 @@
         <td class="center">
           <div class="hidden-sm hidden-xs btn-group">
 
-            <button @click="edit(chapter)" class="btn btn-xs btn-info">
-              <i class="ace-icon fa fa-pencil bigger-120"></i>
+            <button @click="toSection(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+              <i class="ace-icon fa fa-pencil bigger-120"></i>小节
             </button>
 
-            <button @click="del(chapter.id)" class="btn btn-xs btn-danger">
-              <i class="ace-icon fa fa-trash-o bigger-120"></i>
+            <button @click="edit(chapter)" class="btn btn-white btn-xs btn-info btn-round">
+              <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
+            </button>
+            <button @click="del(chapter.id)" class="btn btn-white btn-xs btn-info btn-round">
+              <i class="ace-icon fa fa-trash-o bigger-120"></i>删除
             </button>
 
           </div>
@@ -164,6 +170,11 @@ export default {
           Toast.warning(resp.message)
         }
       })
+    },
+    toSection(chapter){
+      let _this = this;
+      SessionStorage.set("chapter",chapter);
+      _this.$router.push("/business/section");
     }
   }
 }

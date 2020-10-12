@@ -3,7 +3,9 @@ package com.course.business.controller.admin;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.service.impl.SectionService;
+import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,8 +26,10 @@ public class SectionController {
      * @return
      */
     @PostMapping("list")
-    public ResponseDto list(@RequestBody PageDto<SectionDto> pageDto) {
+    public ResponseDto list(@RequestBody SectionPageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
+        ValidatorUtil.require(pageDto.getChapterId(),"大章id");
+        ValidatorUtil.require(pageDto.getCourseId(),"课程id");
         responseDto.setContent(pageDto);
         sectionService.list(pageDto);
         return responseDto;

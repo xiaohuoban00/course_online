@@ -2,6 +2,7 @@ package com.course.server.service;
 
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SectionPageDto;
 
 
 public interface ISectionService {
@@ -11,7 +12,7 @@ public interface ISectionService {
      *
      * @param pageDto
      */
-    void list(PageDto<SectionDto> pageDto);
+    void list(SectionPageDto pageDto);
 
     /**
      * 新增,如存在则更新

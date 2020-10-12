@@ -3,6 +3,7 @@ package com.course.server.service.impl;
 import com.course.server.domain.Section;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SectionPageDto;
 import com.course.server.mapper.SectionMapper;
 import com.course.server.service.ISectionService;
 import com.course.server.utils.CopyUtil;
@@ -24,9 +25,16 @@ public class SectionService implements ISectionService {
     private SectionMapper sectionMapper;
 
     @Override
-    public void list(PageDto<SectionDto> pageDto) {
+    public void list(SectionPageDto pageDto) {
         Example example = new Example(Section.class);
         example.orderBy("id").desc();
+        Example.Criteria criteria = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getChapterId())){
+            criteria.andEqualTo("chapterId",pageDto.getChapterId());
+        }
+        if(!StringUtils.isEmpty(pageDto.getCourseId())){
+            criteria.andEqualTo("courseId",pageDto.getCourseId());
+        }
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         List<Section> sectionList = sectionMapper.selectByExample(example);
         PageInfo<Section> pageInfo = new PageInfo<>(sectionList);
