@@ -34,9 +34,9 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">课程ID</label>
+                <label class="col-sm-2 control-label">课程名称</label>
                 <div class="col-sm-10">
-                  <input type="text" v-model="chapter.courseId" class="form-control" placeholder="课程ID">
+                  <p class="form-control-static">{{course.name}}</p>
                 </div>
               </div>
             </form>
@@ -138,7 +138,8 @@ export default {
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/list', {
         page: page,
-        size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
+        size: _this.$refs.pagination.size,//$refs.组件别名:获取子组件
+        courseId:_this.course.id
       }).then((response) => {
         let resp = response.data
         _this.chapters = resp.content.list
@@ -147,8 +148,8 @@ export default {
     },
     save() {
       let _this = this;
-      if (!Validator.require(_this.chapter.name, "名称")
-          || !Validator.length(_this.chapter.courseId, "课程ID", 1, 8)) {
+      _this.chapter.courseId = _this.course.id
+      if (!Validator.require(_this.chapter.name, "名称")) {
         return;
       }
       Loading.show();

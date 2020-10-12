@@ -1,7 +1,7 @@
 package com.course.business.controller.admin;
 
 import com.course.server.dto.ChapterDto;
-import com.course.server.dto.PageDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.service.impl.ChapterService;
 import com.course.server.utils.ValidatorUtil;
@@ -28,8 +28,9 @@ public class ChapterController {
      * @return
      */
     @PostMapping("list")
-    public ResponseDto list(@RequestBody PageDto<ChapterDto> pageDto) {
+    public ResponseDto list(@RequestBody ChapterPageDto pageDto) {
         ResponseDto responseDto = new ResponseDto();
+        ValidatorUtil.require(pageDto.getCourseId(),"课程ID");
         responseDto.setContent(pageDto);
         chapterService.list(pageDto);
         return responseDto;

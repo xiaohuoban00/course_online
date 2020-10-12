@@ -1,6 +1,7 @@
 package com.course.server.service;
 
 import com.course.server.dto.ChapterDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.PageDto;
 
 /**
@@ -14,7 +15,7 @@ public interface IChapterService {
      *
      * @param pageDto
      */
-    void list(PageDto<ChapterDto> pageDto);
+    void list(ChapterPageDto pageDto);
 
     /**
      * 新增大章如果存在则更新

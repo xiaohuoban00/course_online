@@ -104,6 +104,9 @@
             <h3 class="search-title">
               <a href="#" class="blue">{{ course.name }}</a>
             </h3>
+            <p>
+              <span class="blue bolder bigger-150"><i class="fa fa-rmb"></i>{{course.price}}&nbsp;</span>&nbsp;
+            </p>
             <p>{{ course.summary }}</p>
             <p>
               <span class="badge badge-info">{{course.id}}</span>

@@ -2,6 +2,7 @@ package com.course.server.service.impl;
 
 import com.course.server.domain.Chapter;
 import com.course.server.dto.ChapterDto;
+import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.ChapterMapper;
 import com.course.server.service.IChapterService;
@@ -27,9 +28,13 @@ public class ChapterService implements IChapterService {
     private ChapterMapper chapterMapper;
 
     @Override
-    public void list(PageDto<ChapterDto> pageDto) {
+    public void list(ChapterPageDto pageDto) {
         Example example = new Example(Chapter.class);
         example.orderBy("id").desc();
+        Example.Criteria criteria = example.createCriteria();
+        if(!StringUtils.isEmpty(pageDto.getCourseId())){
+            criteria.andEqualTo("courseId",pageDto.getCourseId());
+        }
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         List<Chapter> chapterList = chapterMapper.selectByExample(example);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
