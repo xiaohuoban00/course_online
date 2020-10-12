@@ -15,6 +15,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -40,7 +41,10 @@ public class CourseService implements ICourseService {
     @Transactional
     public void save(CourseDto courseDto) {
         Course course = CopyUtil.copy(courseDto, Course.class);
+        LocalDateTime now = LocalDateTime.now();
+        course.setUpdatedAt(now);
         if (StringUtils.isEmpty(courseDto.getId())) {
+            course.setCreatedAt(now);
             insert(course);
         } else {
             update(course);
