@@ -151,12 +151,10 @@ export default {
     },
     list: function (page) {
       let _this = this;
-      Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/list', {
         page: page,
         size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
-        Loading.hide();
         let resp = response.data
         if(resp.code==="500"){
           Toast.error(resp.message)

@@ -1,6 +1,12 @@
 <template>
   <div>
+    <h3>{{course.name}}</h3>
     <p>
+      <router-link to="/business/course" class="btn btn-white btn-default btn-round">
+        <i class="ace-icon fa fa-arrow-left"></i>
+        返回课程
+      </router-link>
+      &nbsp;
       <button @click="add()" class="btn btn-white btn-default btn-round">
         <i class="ace-icon fa fa-edit"></i>
         新增
@@ -89,12 +95,18 @@ export default {
   data: function () {
     return {
       chapter: {},
-      chapters: []
+      chapters: [],
+      course:{}
     }
   },
-  mounted() {
+  mounted: function () {
     let _this = this;
     //_this.$parent.activeSidebar("business-chapter-sidebar");
+    let course =  SessionStorage.get("course") || {};
+    if(Tool.isEmpty(course)){
+      _this.$router.push("/welcome");
+    }
+    _this.course = course;
     _this.list(1);
   },
   methods: {
@@ -124,12 +136,10 @@ export default {
     },
     list: function (page) {
       let _this = this;
-      Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/chapter/list', {
         page: page,
         size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
-        Loading.hide();
         let resp = response.data
         _this.chapters = resp.content.list
         _this.$refs.pagination.render(page, resp.content.total)

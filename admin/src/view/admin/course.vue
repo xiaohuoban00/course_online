@@ -111,11 +111,14 @@
               <span class="badge badge-info">{{course.time | formatSecond}}</span>
             </p>
             <p>
+              <button @click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
+                <i class="ace-icon fa fa-pencil bigger-120"></i>大章
+              </button>
               <button @click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
-                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
               </button>
               <button @click="del(course.id)" class="btn btn-white btn-xs btn-info btn-round">
-                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                <i class="ace-icon fa fa-trash-o bigger-120"></i>删除
               </button>
             </p>
           </div>
@@ -223,12 +226,10 @@ export default {
     },
     list: function (page) {
       let _this = this;
-      Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list', {
         page: page,
         size: _this.$refs.pagination.size//$refs.组件别名:获取子组件
       }).then((response) => {
-        Loading.hide();
         let resp = response.data
         if (resp.code === "500") {
           Toast.error(resp.message)
@@ -251,6 +252,11 @@ export default {
           Toast.warning(resp.message)
         }
       })
+    },
+    toChapter(course){
+      let _this = this;
+      SessionStorage.set("course",course);
+      _this.$router.push("/business/chapter")
     }
   }
 }
