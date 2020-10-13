@@ -4,6 +4,7 @@ import com.course.server.domain.Section;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.SectionPageDto;
+import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.SectionMapper;
 import com.course.server.service.ISectionService;
 import com.course.server.utils.CopyUtil;
@@ -23,6 +24,9 @@ import java.util.List;
 public class SectionService implements ISectionService {
     @Resource
     private SectionMapper sectionMapper;
+
+    @Resource
+    private CourseMapper courseMapper;
 
     @Override
     public void list(SectionPageDto pageDto) {
@@ -53,6 +57,7 @@ public class SectionService implements ISectionService {
         } else {
             update(section);
         }
+        courseMapper.updateTime(sectionDto.getCourseId());
     }
 
     private void insert(Section section) {

@@ -5,4 +5,6 @@ import tk.mybatis.mapper.common.Mapper;
 
 
 public interface CourseMapper extends Mapper<Course> {
+
+    void updateTime(String courseId);
 }
