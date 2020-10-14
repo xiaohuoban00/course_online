@@ -1,6 +1,7 @@
 package com.course.server.exception;
 
 import com.course.server.dto.ResponseDto;
+import com.course.server.enmus.CodeEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,9 +20,8 @@ public class BaseExceptionHandler {
         if(e instanceof ValidatorException){
         	//处理的业务逻辑
             LOGGER.warn(e.getMessage());
-            return new ResponseDto(false,"400","请求参数异常",null);
+            return new ResponseDto(false, CodeEnum.BAD_REQUEST.getCode(), "请求参数异常",null);
         }
-        e.printStackTrace();
-        return new ResponseDto(false, "500","服务器内部错误",null);
+        return new ResponseDto(false, CodeEnum.ERROR.getCode(), "服务器内部错误",null);
     }
 }

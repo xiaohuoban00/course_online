@@ -2,7 +2,6 @@ package com.course.server.service.impl;
 
 import com.course.server.domain.Section;
 import com.course.server.dto.SectionDto;
-import com.course.server.dto.PageDto;
 import com.course.server.dto.SectionPageDto;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.SectionMapper;
