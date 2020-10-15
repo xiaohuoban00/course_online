@@ -68,6 +68,21 @@ public class CategoryService implements ICategoryService {
     @Override
     @Transactional
     public void delete(String id) {
+        deleteChild(id);
         categoryMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 如果是一级分类则删除其下的二级分类
+     * @param id 一级分类id
+     */
+    private void deleteChild(String id){
+        Category category = categoryMapper.selectByPrimaryKey(id);
+        if("00000000".equals(category.getParent())){
+            Example example = new Example(Category.class);
+            Example.Criteria criteria = example.createCriteria();
+            criteria.andEqualTo("parent",id);
+            categoryMapper.deleteByExample(example);
+        }
     }
 }

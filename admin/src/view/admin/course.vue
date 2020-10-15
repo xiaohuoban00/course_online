@@ -22,6 +22,12 @@
           <div class="modal-body">
             <form class="form-horizontal">
               <div class="form-group">
+                <label class="col-sm-2 control-label">分类</label>
+                <div class="col-sm-10">
+                  <ul id="tree" class="ztree"></ul>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-2 control-label">名称</label>
                 <div class="col-sm-10">
                   <input type="text" v-model="course.name" class="form-control">
@@ -194,13 +200,15 @@ export default {
       courses: [],
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_STATUS: COURSE_STATUS,
-      COURSE_CHARGE: COURSE_CHARGE
+      COURSE_CHARGE: COURSE_CHARGE,
+      categorys:[]
     }
   },
   mounted() {
     let _this = this;
     //_this.$parent.activeSidebar("business-course-sidebar");
     _this.list(1);
+    _this.allCategory();
   },
   methods: {
     add() {
@@ -260,6 +268,35 @@ export default {
       let _this = this;
       SessionStorage.set("course",course);
       _this.$router.push("/business/chapter")
+    },
+    allCategory(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/category/all', {}).then((response) => {
+        let resp = response.data
+        if (resp.code === "500") {
+          Toast.error(resp.message)
+        }
+        _this.categorys = resp.content
+        _this.initTree()
+      })
+    },
+    initTree(){
+      let _this = this;
+      let setting = {
+        check: {
+          enable: true
+        },
+        data: {
+          simpleData: {
+            idKey: "id",
+            pIdKey: "parent",
+            rootPId: "00000000",
+            enable: true
+          }
+        }
+      };
+      let zNodes = _this.categorys;
+      _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
     }
   }
 }

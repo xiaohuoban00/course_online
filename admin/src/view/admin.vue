@@ -575,7 +575,6 @@ export default {
   watch:{
     $route:{
       handler:function (val, oldVal){
-        console.log("-----页面跳转",val,oldVal);
         let _this = this;
         //页面加载完成后执行
         _this.$nextTick(function (){
