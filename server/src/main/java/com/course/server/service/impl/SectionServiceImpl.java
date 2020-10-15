@@ -3,8 +3,8 @@ package com.course.server.service.impl;
 import com.course.server.domain.Section;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.SectionPageDto;
-import com.course.server.mapper.CourseMapper;
 import com.course.server.mapper.SectionMapper;
+import com.course.server.service.ICourseService;
 import com.course.server.service.ISectionService;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
@@ -20,12 +20,12 @@ import java.util.List;
 
 
 @Service
-public class SectionService implements ISectionService {
+public class SectionServiceImpl implements ISectionService {
     @Resource
     private SectionMapper sectionMapper;
 
     @Resource
-    private CourseMapper courseMapper;
+    private ICourseService courseService;
 
     @Override
     public void list(SectionPageDto pageDto) {
@@ -56,7 +56,7 @@ public class SectionService implements ISectionService {
         } else {
             update(section);
         }
-        courseMapper.updateTime(sectionDto.getCourseId());
+        courseService.updateTime(sectionDto.getCourseId());
     }
 
     private void insert(Section section) {
@@ -74,4 +74,5 @@ public class SectionService implements ISectionService {
     public void delete(String id) {
         sectionMapper.deleteByPrimaryKey(id);
     }
+
 }

@@ -201,7 +201,8 @@ export default {
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_STATUS: COURSE_STATUS,
       COURSE_CHARGE: COURSE_CHARGE,
-      categorys:[]
+      categorys:[],
+      tree: {}
     }
   },
   mounted() {
@@ -214,11 +215,13 @@ export default {
     add() {
       let _this = this
       _this.course = {};
+      _this.tree.checkAllNodes(false);
       $("#form-modal").modal("show")
     },
     edit(course) {
-      let _this = this
-      _this.course = $.extend({}, course)
+      let _this = this;
+      _this.course = $.extend({}, course);
+      _this.listCategory(course.id);
       $("#form-modal").modal("show")
     },
     del(id) {
@@ -249,8 +252,14 @@ export default {
         _this.$refs.pagination.render(page, resp.content.total)
       })
     },
-    save() {
+    save: function () {
       let _this = this;
+      let categorys = _this.tree.getCheckedNodes();
+      if(Tool.isEmpty(categorys)){
+         Toast.warning("请选择分类");
+         return;
+      }
+      _this.course.categorys = categorys
       Loading.show();
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save', _this.course).then((response) => {
         let resp = response.data
@@ -297,6 +306,18 @@ export default {
       };
       let zNodes = _this.categorys;
       _this.tree = $.fn.zTree.init($("#tree"), setting, zNodes);
+    },
+    listCategory: function (courseId) {
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/list-category/' + courseId, {}).then((response) => {
+        let resp = response.data;
+        let categorys = resp.content;
+        _this.tree.checkAllNodes(false);
+        for (let i = 0; i < categorys.length; i++) {
+          let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
+          _this.tree.checkNode(node,true);
+        }
+      })
     }
   }
 }

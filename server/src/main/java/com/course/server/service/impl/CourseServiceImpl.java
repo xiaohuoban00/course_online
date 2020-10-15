@@ -1,9 +1,12 @@
 package com.course.server.service.impl;
 
 import com.course.server.domain.Course;
+import com.course.server.dto.CategoryDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.mapper.CategoryMapper;
 import com.course.server.mapper.CourseMapper;
+import com.course.server.service.ICourseCategoryService;
 import com.course.server.service.ICourseService;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
@@ -20,9 +23,12 @@ import java.util.List;
 
 
 @Service
-public class CourseService implements ICourseService {
+public class CourseServiceImpl implements ICourseService {
     @Resource
     private CourseMapper courseMapper;
+
+    @Resource
+    private ICourseCategoryService courseCategoryService;
 
     @Override
     public void list(PageDto<CourseDto> pageDto) {
@@ -49,6 +55,7 @@ public class CourseService implements ICourseService {
         } else {
             update(course);
         }
+        courseCategoryService.saveBatch(courseDto.getId(),courseDto.getCategorys());
     }
 
     private void insert(Course course) {
@@ -65,5 +72,9 @@ public class CourseService implements ICourseService {
     @Transactional
     public void delete(String id) {
         courseMapper.deleteByPrimaryKey(id);
+    }
+
+    public void updateTime(String courseId) {
+        courseMapper.updateTime(courseId);
     }
 }

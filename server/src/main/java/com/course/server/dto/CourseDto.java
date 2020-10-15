@@ -3,6 +3,7 @@ package com.course.server.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CourseDto {
 
@@ -33,6 +34,16 @@ public class CourseDto {
     private LocalDateTime updatedAt;
 
     private String teacherId;
+
+    private List<CategoryDto> categorys;
+
+    public List<CategoryDto> getCategorys() {
+        return categorys;
+    }
+
+    public void setCategorys(List<CategoryDto> categorys) {
+        this.categorys = categorys;
+    }
 
     public String getId() {
         return id;
@@ -146,23 +157,4 @@ public class CourseDto {
         this.teacherId = teacherId;
     }
 
-    @Override
-    public String toString() {
-        return "Course{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", summary='" + summary + '\'' +
-                ", time=" + time +
-                ", price=" + price +
-                ", image='" + image + '\'' +
-                ", level='" + level + '\'' +
-                ", charge='" + charge + '\'' +
-                ", status='" + status + '\'' +
-                ", enroll=" + enroll +
-                ", sort=" + sort +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", teacherId='" + teacherId + '\'' +
-                '}';
-    }
 }

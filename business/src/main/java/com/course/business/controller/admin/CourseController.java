@@ -1,13 +1,17 @@
 package com.course.business.controller.admin;
 
+import com.course.server.dto.CourseCategoryDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
-import com.course.server.service.impl.CourseService;
+import com.course.server.enmus.CodeEnum;
+import com.course.server.service.ICourseCategoryService;
+import com.course.server.service.ICourseService;
+import com.course.server.service.impl.CourseServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
+import java.util.List;
 
 
 @RestController
@@ -15,7 +19,10 @@ import javax.annotation.Resource;
 public class CourseController {
 
     @Resource
-    private CourseService courseService;
+    private ICourseService courseService;
+
+    @Resource
+    private ICourseCategoryService courseCategoryService;
 
     /**
      * 查询列表
@@ -55,5 +62,17 @@ public class CourseController {
     public ResponseDto delete(@PathVariable String id) {
         courseService.delete(id);
         return new ResponseDto();
+    }
+
+    /**
+     * 查询课程下所有分类
+     *
+     * @param courseId
+     * @return
+     */
+    @PostMapping("list-category/{courseId}")
+    public ResponseDto listCategory(@PathVariable String courseId) {
+        List<CourseCategoryDto> dtoList = courseCategoryService.listByCourse(courseId);
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, dtoList);
     }
 }

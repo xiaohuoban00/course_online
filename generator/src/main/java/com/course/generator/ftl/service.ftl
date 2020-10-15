@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @Service
-public class ${Domain}Service implements I${Domain}Service {
+public class ${Domain}ServiceImpl implements I${Domain}Service {
     @Resource
     private ${Domain}Mapper ${domain}Mapper;
 

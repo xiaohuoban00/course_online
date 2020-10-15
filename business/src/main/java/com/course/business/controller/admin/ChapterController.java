@@ -3,7 +3,8 @@ package com.course.business.controller.admin;
 import com.course.server.dto.ChapterDto;
 import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.ResponseDto;
-import com.course.server.service.impl.ChapterService;
+import com.course.server.service.IChapterService;
+import com.course.server.service.impl.ChapterServiceImpl;
 import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import javax.annotation.Resource;
 public class ChapterController {
 
     @Resource
-    private ChapterService chapterService;
+    private IChapterService chapterService;
 
     /**
      * 查询列表

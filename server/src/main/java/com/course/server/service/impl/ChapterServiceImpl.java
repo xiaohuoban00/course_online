@@ -23,7 +23,7 @@ import java.util.List;
  * @date 2020/10/8 3:32 下午
  */
 @Service
-public class ChapterService implements IChapterService {
+public class ChapterServiceImpl implements IChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 

@@ -3,7 +3,8 @@ package com.course.business.controller.admin;
 import com.course.server.dto.SectionDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.dto.SectionPageDto;
-import com.course.server.service.impl.SectionService;
+import com.course.server.service.ISectionService;
+import com.course.server.service.impl.SectionServiceImpl;
 import com.course.server.utils.ValidatorUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import javax.annotation.Resource;
 public class SectionController {
 
     @Resource
-    private SectionService sectionService;
+    private ISectionService sectionService;
 
     /**
      * 查询列表

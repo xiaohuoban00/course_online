@@ -4,7 +4,8 @@ import com.course.server.dto.CategoryDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.enmus.CodeEnum;
-import com.course.server.service.impl.CategoryService;
+import com.course.server.service.ICategoryService;
+import com.course.server.service.impl.CategoryServiceImpl;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,7 +17,7 @@ import java.util.List;
 public class CategoryController {
 
     @Resource
-    private CategoryService categoryService;
+    private ICategoryService categoryService;
 
     /**
      * 查询列表

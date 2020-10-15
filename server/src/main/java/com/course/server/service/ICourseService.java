@@ -26,4 +26,12 @@ public interface ICourseService {
      * @param id
      */
     void delete(String id);
+
+    /**
+     * 更新课程时长
+     *
+     * @param courseId
+     * @return
+     */
+    void updateTime(String courseId);
 }
