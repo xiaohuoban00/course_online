@@ -22,6 +22,7 @@ public class BaseExceptionHandler {
             LOGGER.warn(e.getMessage());
             return new ResponseDto(false, CodeEnum.BAD_REQUEST.getCode(), "请求参数异常",null);
         }
+        LOGGER.error("出现异常",e);
         return new ResponseDto(false, CodeEnum.ERROR.getCode(), "服务器内部错误",null);
     }
 }

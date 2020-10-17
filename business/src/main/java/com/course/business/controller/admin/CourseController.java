@@ -84,9 +84,20 @@ public class CourseController {
         return new ResponseDto(true,CodeEnum.SUCCESS.getCode(), null,content);
     }
 
+    /**
+     * 保存内容
+     * @param courseContentDto
+     * @return
+     */
     @PostMapping("save-content")
     public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
         courseService.saveContent(courseContentDto);
         return new ResponseDto(true,CodeEnum.SUCCESS.getCode(), null,courseContentDto);
+    }
+
+    @PostMapping("sort")
+    public ResponseDto sort(@RequestBody SortDto sortDto){
+        courseService.sort(sortDto);
+        return new ResponseDto(true,CodeEnum.SUCCESS.getCode(), null,null);
     }
 }

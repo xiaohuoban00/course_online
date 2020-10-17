@@ -84,7 +84,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">顺序</label>
                 <div class="col-sm-10">
-                  <input type="text" v-model="course.sort" class="form-control">
+                  <input type="text" v-model="course.sort" class="form-control" disabled>
                 </div>
               </div>
             </form>
@@ -95,7 +95,7 @@
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+    </div>
     <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -116,6 +116,39 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
             <button type="button" class="btn btn-primary" @click="saveContent()">保存</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+    <div id="course-sort-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">排序</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">当前排序</label>
+                  <div class="col-sm-10">
+                    <input type="text" v-model="sort.oldSort" class="form-control" disabled>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-sm-2 control-label">新排序</label>
+                  <div class="col-sm-10">
+                    <input type="text" v-model="sort.newSort" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="updateSort()">保存</button>
           </div>
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
@@ -149,6 +182,9 @@
               </button>
               <button @click="editContent(course)" class="btn btn-white btn-xs btn-info btn-round">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>内容
+              </button>
+              <button @click="openSortModal(course)" class="btn btn-white btn-xs btn-info btn-round">
+                <i class="ace-icon fa fa-pencil bigger-120"></i>排序
               </button>
               <button @click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
@@ -229,7 +265,12 @@ export default {
       COURSE_STATUS: COURSE_STATUS,
       COURSE_CHARGE: COURSE_CHARGE,
       categorys:[],
-      tree: {}
+      tree: {},
+      sort:{
+        id:"",
+        oldSort:0,
+        newSort:0
+      }
     }
   },
   mounted() {
@@ -241,7 +282,9 @@ export default {
   methods: {
     add() {
       let _this = this
-      _this.course = {};
+      _this.course = {
+        sort:_this.$refs.pagination.total+1
+      };
       _this.tree.checkAllNodes(false);
       $("#form-modal").modal("show")
     },
@@ -354,6 +397,7 @@ export default {
         focus: true,
         height: 300
       });
+      $("#course-content-modal").modal("show")
       $("#content").summernote('code', '');
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id).then((response) => {
         let resp = response.data;
@@ -382,6 +426,32 @@ export default {
           Toast.warning(resp.message);
         }
       })
+    },
+    openSortModal(course){
+      let _this = this;
+    _this.sort = {
+      id:course.id,
+      oldSort:course.sort,
+      newSort:course.sort
+    }
+      $("#course-sort-modal").modal("show")
+    },
+    updateSort(){
+      let _this = this;
+      if(_this.sort.newSort === _this.sort.oldSort){
+        Toast.warning("排序没有变化");
+        return;
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/course/sort",_this.sort).then((response)=>{
+        let resp = response.data;
+        if(resp.success){
+          Toast.success("更新排序成功");
+          $("#course-sort-modal").modal("hide");
+          _this.list(1)
+        }else {
+          Toast.warning(resp.message);
+        }
+      });
     }
   }
 }

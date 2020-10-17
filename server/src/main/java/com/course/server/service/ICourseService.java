@@ -3,6 +3,7 @@ package com.course.server.service;
 import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.SortDto;
 
 
 public interface ICourseService {
@@ -38,6 +39,7 @@ public interface ICourseService {
 
     /**
      * 查询课程内容
+     *
      * @param id
      * @return
      */
@@ -45,8 +47,16 @@ public interface ICourseService {
 
     /**
      * 保存或更新课程内容
+     *
      * @param courseContentDto
      * @return
      */
     int saveContent(CourseContentDto courseContentDto);
+
+    /**
+     * 排序
+     *
+     * @param sortDto
+     */
+    void sort(SortDto sortDto);
 }

@@ -2,10 +2,7 @@ package com.course.server.service.impl;
 
 import com.course.server.domain.Course;
 import com.course.server.domain.CourseContent;
-import com.course.server.dto.CategoryDto;
-import com.course.server.dto.CourseContentDto;
-import com.course.server.dto.CourseDto;
-import com.course.server.dto.PageDto;
+import com.course.server.dto.*;
 import com.course.server.mapper.CategoryMapper;
 import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
@@ -61,7 +58,7 @@ public class CourseServiceImpl implements ICourseService {
         } else {
             update(course);
         }
-        courseCategoryService.saveBatch(courseDto.getId(),courseDto.getCategorys());
+        courseCategoryService.saveBatch(course.getId(),courseDto.getCategorys());
     }
 
     private void insert(Course course) {
@@ -102,6 +99,20 @@ public class CourseServiceImpl implements ICourseService {
             i = courseContentMapper.insert(courseContent);
         }
         return i;
+    }
+
+    @Override
+    @Transactional
+    public void sort(SortDto sortDto) {
+        courseMapper.updateSort(sortDto);
+        //如果排序值变大
+        if(sortDto.getNewSort()>sortDto.getOldSort()){
+            courseMapper.moveSortsForward(sortDto);
+        }
+        //如果排序值变少
+        if(sortDto.getNewSort()<sortDto.getOldSort()){
+            courseMapper.moveSortsBackward(sortDto);
+        }
     }
 
 }
