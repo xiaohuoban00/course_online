@@ -1,5 +1,6 @@
 package com.course.server.service;
 
+import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 
@@ -34,4 +35,18 @@ public interface ICourseService {
      * @return
      */
     void updateTime(String courseId);
+
+    /**
+     * 查询课程内容
+     * @param id
+     * @return
+     */
+    CourseContentDto findContent(String id);
+
+    /**
+     * 保存或更新课程内容
+     * @param courseContentDto
+     * @return
+     */
+    int saveContent(CourseContentDto courseContentDto);
 }

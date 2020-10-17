@@ -96,6 +96,30 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
+    <div id="course-content-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">内容编辑</h4>
+          </div>
+          <div class="modal-body">
+            <form class="form-horizontal">
+              <div class="form-group">
+                <div class="col-lg-12">
+                  <div id="content"></div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+            <button type="button" class="btn btn-primary" @click="saveContent()">保存</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
     <div class="row">
       <div v-for="(course,i) in courses" :key="i" class="col-md-4">
         <div class="thumbnail search-thumbnail">
@@ -122,6 +146,9 @@
             <p>
               <button @click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>大章
+              </button>
+              <button @click="editContent(course)" class="btn btn-white btn-xs btn-info btn-round">
+                <i class="ace-icon fa fa-pencil bigger-120"></i>内容
               </button>
               <button @click="edit(course)" class="btn btn-white btn-xs btn-info btn-round">
                 <i class="ace-icon fa fa-pencil bigger-120"></i>编辑
@@ -316,6 +343,43 @@ export default {
         for (let i = 0; i < categorys.length; i++) {
           let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
           _this.tree.checkNode(node,true);
+        }
+      })
+    },
+    editContent: function (course) {
+      let _this = this;
+      let id = course.id;
+      _this.course = course
+      $("#content").summernote({
+        focus: true,
+        height: 300
+      });
+      $("#content").summernote('code', '');
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id).then((response) => {
+        let resp = response.data;
+        if(resp.success){
+          $("#course-content-modal").modal({backdrop:'static',keyboard:false});
+          if(resp.content){
+            console.log(resp);
+            $("#content").summernote('code', resp.content.content);
+          }
+        }else {
+          Toast.warning(resp.message);
+        }
+      })
+    },
+    saveContent: function () {
+      let _this = this;
+      let content = $("#content").summernote('code');
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/course/save-content', {
+        id: _this.course.id,
+        content: content
+      }).then((response) => {
+        let resp = response.data;
+        if(resp.success){
+          Toast.success("内容保存成功");
+        }else {
+          Toast.warning(resp.message);
         }
       })
     }

@@ -1,10 +1,13 @@
 package com.course.server.service.impl;
 
 import com.course.server.domain.Course;
+import com.course.server.domain.CourseContent;
 import com.course.server.dto.CategoryDto;
+import com.course.server.dto.CourseContentDto;
 import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.mapper.CategoryMapper;
+import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
 import com.course.server.service.ICourseCategoryService;
 import com.course.server.service.ICourseService;
@@ -29,6 +32,9 @@ public class CourseServiceImpl implements ICourseService {
 
     @Resource
     private ICourseCategoryService courseCategoryService;
+
+    @Resource
+    private CourseContentMapper courseContentMapper;
 
     @Override
     public void list(PageDto<CourseDto> pageDto) {
@@ -74,7 +80,28 @@ public class CourseServiceImpl implements ICourseService {
         courseMapper.deleteByPrimaryKey(id);
     }
 
+    @Override
     public void updateTime(String courseId) {
         courseMapper.updateTime(courseId);
     }
+
+    @Override
+    public CourseContentDto findContent(String id){
+        CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
+        if(courseContent==null){
+            return null;
+        }
+        return CopyUtil.copy(courseContent,CourseContentDto.class);
+    }
+
+    @Override
+    public int saveContent(CourseContentDto courseContentDto){
+        CourseContent courseContent = CopyUtil.copy(courseContentDto, CourseContent.class);
+        int i = courseContentMapper.updateByPrimaryKeySelective(courseContent);
+        if(i==0){
+            i = courseContentMapper.insert(courseContent);
+        }
+        return i;
+    }
+
 }

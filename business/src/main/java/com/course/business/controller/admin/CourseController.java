@@ -1,9 +1,6 @@
 package com.course.business.controller.admin;
 
-import com.course.server.dto.CourseCategoryDto;
-import com.course.server.dto.CourseDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.ResponseDto;
+import com.course.server.dto.*;
 import com.course.server.enmus.CodeEnum;
 import com.course.server.service.ICourseCategoryService;
 import com.course.server.service.ICourseService;
@@ -74,5 +71,22 @@ public class CourseController {
     public ResponseDto listCategory(@PathVariable String courseId) {
         List<CourseCategoryDto> dtoList = courseCategoryService.listByCourse(courseId);
         return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, dtoList);
+    }
+
+    /**
+     * 查询课程内容
+     * @param id
+     * @return
+     */
+    @GetMapping("find-content/{id}")
+    public ResponseDto findContent(@PathVariable String id){
+        CourseContentDto content = courseService.findContent(id);
+        return new ResponseDto(true,CodeEnum.SUCCESS.getCode(), null,content);
+    }
+
+    @PostMapping("save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto courseContentDto){
+        courseService.saveContent(courseContentDto);
+        return new ResponseDto(true,CodeEnum.SUCCESS.getCode(), null,courseContentDto);
     }
 }
