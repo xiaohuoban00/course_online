@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class ${Domain}Controller {
 
     @Resource
-    private ${Domain}Service ${domain}Service;
+    private I${Domain}Service ${domain}Service;
 
     /**
      * 查询列表
