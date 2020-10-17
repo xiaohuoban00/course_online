@@ -107,7 +107,7 @@ export default {
   },
   mounted: function () {
     let _this = this;
-    //_this.$parent.activeSidebar("business-chapter-sidebar");
+    _this.$parent.activeSidebar("business-course-sidebar");
     let course =  SessionStorage.get("course") || {};
     if(Tool.isEmpty(course)){
       _this.$router.push("/welcome");

@@ -146,7 +146,7 @@ export default {
   },
   mounted() {
     let _this = this;
-    //_this.$parent.activeSidebar("business-section-sidebar");
+    _this.$parent.activeSidebar("business-course-sidebar");
     let course =  SessionStorage.get("course") || {};
     let chapter =  SessionStorage.get("chapter") || {};
     if(Tool.isEmpty(course)||Tool.isEmpty(chapter)){

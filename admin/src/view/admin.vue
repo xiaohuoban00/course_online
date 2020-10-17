@@ -420,7 +420,7 @@
 
                 <b class="arrow"></b>
               </li>
-              <li class="" id="business-chapter-sidebar">
+              <!--<li class="" id="business-chapter-sidebar">
                 <router-link to="/business/chapter">
                   <i class="menu-icon fa fa-caret-right"></i>
                   大章管理
@@ -436,7 +436,7 @@
                 </router-link>
 
                 <b class="arrow"></b>
-              </li>
+              </li>-->
             </ul>
           </li>
 
