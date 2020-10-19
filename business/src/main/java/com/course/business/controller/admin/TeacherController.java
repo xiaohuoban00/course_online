@@ -1,13 +1,15 @@
 package com.course.business.controller.admin;
 
+import com.course.server.domain.Teacher;
 import com.course.server.dto.TeacherDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.enmus.CodeEnum;
 import com.course.server.service.ITeacherService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
+import java.util.List;
 
 
 @RestController
@@ -55,5 +57,16 @@ public class TeacherController {
     public ResponseDto delete(@PathVariable String id) {
         teacherService.delete(id);
         return new ResponseDto();
+    }
+
+    /**
+     * 查询所有
+     *
+     * @return
+     */
+    @PostMapping("all")
+    public ResponseDto all() {
+        List<TeacherDto> teacherList = teacherService.all();
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, teacherList);
     }
 }

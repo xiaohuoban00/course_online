@@ -34,6 +34,14 @@
                 </div>
               </div>
               <div class="form-group">
+                <label class="col-sm-2 control-label">讲师</label>
+                <div class="col-sm-10">
+                  <select v-model="course.teacherId" class="form-control">
+                    <option v-for="(teacher,i) in teachers" :value="teacher.id" :key="i">{{ teacher.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
                 <label class="col-sm-2 control-label">概述</label>
                 <div class="col-sm-10">
                   <input type="text" v-model="course.summary" class="form-control">
@@ -270,7 +278,8 @@ export default {
         id:"",
         oldSort:0,
         newSort:0
-      }
+      },
+      teachers:[]
     }
   },
   mounted() {
@@ -278,6 +287,7 @@ export default {
     //_this.$parent.activeSidebar("business-course-sidebar");
     _this.list(1);
     _this.allCategory();
+    _this.allTeacher();
   },
   methods: {
     add() {
@@ -452,6 +462,17 @@ export default {
           Toast.warning(resp.message);
         }
       });
+    },
+    allTeacher(){
+      let _this = this;
+      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/teacher/all").then((response)=>{
+        let resp = response.data
+        if (!resp.success) {
+          Toast.error(resp.message)
+          return;
+        }
+        _this.teachers = resp.content
+      })
     }
   }
 }

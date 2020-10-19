@@ -62,4 +62,12 @@ public class TeacherServiceImpl implements ITeacherService {
     public void delete(String id) {
         teacherMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public List<TeacherDto> all() {
+        Example example = new Example(Teacher.class);
+        example.orderBy("id").desc();
+        List<Teacher> teacherList = teacherMapper.selectByExample(example);
+        return CopyUtil.copyList(teacherList,TeacherDto.class);
+    }
 }
