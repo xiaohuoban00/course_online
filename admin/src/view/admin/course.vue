@@ -169,20 +169,34 @@
           <div class="caption">
             <div class="clearfix">
               <span class="pull-right label label-primary info-label">{{ COURSE_LEVEL | optionKV(course.level) }}</span>
-              <span class="pull-right label label-primary info-label">{{ COURSE_STATUS | optionKV(course.status) }}</span>
-              <span class="pull-right label label-primary info-label">{{ COURSE_CHARGE | optionKV(course.charge) }}</span>
+              <span class="pull-right label label-primary info-label">{{
+                  COURSE_STATUS | optionKV(course.status)
+                }}</span>
+              <span class="pull-right label label-primary info-label">{{
+                  COURSE_CHARGE | optionKV(course.charge)
+                }}</span>
             </div>
             <h3 class="search-title">
               <a href="#" class="blue">{{ course.name }}</a>
             </h3>
+            <div v-for="teacher in teachers.filter(t=>{return t.id===course.teacherId})"
+                 class="profile-activity clearfix">
+              <div>
+                <img v-show="!teacher.image" class="pull-left" src="/ace/assets/images/avatars/avatar5.png">
+                <img v-show="teacher.image" class="pull-left" :src="teacher.image">
+                <a class="user" href="#"> {{ teacher.name }} </a>
+                <br>
+                {{ teacher.position }}
+              </div>
+            </div>
             <p>
-              <span class="blue bolder bigger-150"><i class="fa fa-rmb"></i>{{course.price}}&nbsp;</span>&nbsp;
+              <span class="blue bolder bigger-150"><i class="fa fa-rmb"></i>{{ course.price }}&nbsp;</span>&nbsp;
             </p>
             <p>{{ course.summary }}</p>
             <p>
-              <span class="badge badge-info">{{course.id}}</span>
-              <span class="badge badge-info">排序：{{course.sort}}</span>
-              <span class="badge badge-info">{{course.time | formatSecond}}</span>
+              <span class="badge badge-info">{{ course.id }}</span>
+              <span class="badge badge-info">排序：{{ course.sort }}</span>
+              <span class="badge badge-info">{{ course.time | formatSecond }}</span>
             </p>
             <p>
               <button @click="toChapter(course)" class="btn btn-white btn-xs btn-info btn-round">
@@ -272,14 +286,14 @@ export default {
       COURSE_LEVEL: COURSE_LEVEL,
       COURSE_STATUS: COURSE_STATUS,
       COURSE_CHARGE: COURSE_CHARGE,
-      categorys:[],
+      categorys: [],
       tree: {},
-      sort:{
-        id:"",
-        oldSort:0,
-        newSort:0
+      sort: {
+        id: "",
+        oldSort: 0,
+        newSort: 0
       },
-      teachers:[]
+      teachers: []
     }
   },
   mounted() {
@@ -293,7 +307,7 @@ export default {
     add() {
       let _this = this
       _this.course = {
-        sort:_this.$refs.pagination.total+1
+        sort: _this.$refs.pagination.total + 1
       };
       _this.tree.checkAllNodes(false);
       $("#form-modal").modal("show")
@@ -335,9 +349,9 @@ export default {
     save: function () {
       let _this = this;
       let categorys = _this.tree.getCheckedNodes();
-      if(Tool.isEmpty(categorys)){
-         Toast.warning("请选择分类");
-         return;
+      if (Tool.isEmpty(categorys)) {
+        Toast.warning("请选择分类");
+        return;
       }
       _this.course.categorys = categorys
       Loading.show();
@@ -353,12 +367,12 @@ export default {
         }
       })
     },
-    toChapter(course){
+    toChapter(course) {
       let _this = this;
-      SessionStorage.set(SESSION_KEY_COURSE,course);
+      SessionStorage.set(SESSION_KEY_COURSE, course);
       _this.$router.push("/business/chapter")
     },
-    allCategory(){
+    allCategory() {
       let _this = this;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/category/all', {}).then((response) => {
         let resp = response.data
@@ -369,7 +383,7 @@ export default {
         _this.initTree()
       })
     },
-    initTree(){
+    initTree() {
       let _this = this;
       let setting = {
         check: {
@@ -394,8 +408,8 @@ export default {
         let categorys = resp.content;
         _this.tree.checkAllNodes(false);
         for (let i = 0; i < categorys.length; i++) {
-          let node = _this.tree.getNodeByParam("id",categorys[i].categoryId);
-          _this.tree.checkNode(node,true);
+          let node = _this.tree.getNodeByParam("id", categorys[i].categoryId);
+          _this.tree.checkNode(node, true);
         }
       })
     },
@@ -411,13 +425,13 @@ export default {
       $("#content").summernote('code', '');
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/business/admin/course/find-content/' + id).then((response) => {
         let resp = response.data;
-        if(resp.success){
-          $("#course-content-modal").modal({backdrop:'static',keyboard:false});
-          if(resp.content){
+        if (resp.success) {
+          $("#course-content-modal").modal({backdrop: 'static', keyboard: false});
+          if (resp.content) {
             console.log(resp);
             $("#content").summernote('code', resp.content.content);
           }
-        }else {
+        } else {
           Toast.warning(resp.message);
         }
       })
@@ -430,42 +444,42 @@ export default {
         content: content
       }).then((response) => {
         let resp = response.data;
-        if(resp.success){
+        if (resp.success) {
           Toast.success("内容保存成功");
-        }else {
+        } else {
           Toast.warning(resp.message);
         }
       })
     },
-    openSortModal(course){
+    openSortModal(course) {
       let _this = this;
-    _this.sort = {
-      id:course.id,
-      oldSort:course.sort,
-      newSort:course.sort
-    }
+      _this.sort = {
+        id: course.id,
+        oldSort: course.sort,
+        newSort: course.sort
+      }
       $("#course-sort-modal").modal("show")
     },
-    updateSort(){
+    updateSort() {
       let _this = this;
-      if(_this.sort.newSort === _this.sort.oldSort){
+      if (_this.sort.newSort === _this.sort.oldSort) {
         Toast.warning("排序没有变化");
         return;
       }
-      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/course/sort",_this.sort).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/course/sort", _this.sort).then((response) => {
         let resp = response.data;
-        if(resp.success){
+        if (resp.success) {
           Toast.success("更新排序成功");
           $("#course-sort-modal").modal("hide");
           _this.list(1)
-        }else {
+        } else {
           Toast.warning(resp.message);
         }
       });
     },
-    allTeacher(){
+    allTeacher() {
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/teacher/all").then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + "/business/admin/teacher/all").then((response) => {
         let resp = response.data
         if (!resp.success) {
           Toast.error(resp.message)
@@ -479,7 +493,13 @@ export default {
 </script>
 
 <style scoped>
-.caption h3{
+.caption h3 {
   font-size: 20px;
+}
+/*增加自适应字体*/
+@media(max-width: 1199px) {
+  .caption h3{
+    font-size: 16px;
+  }
 }
 </style>
