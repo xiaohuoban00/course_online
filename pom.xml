@@ -11,6 +11,7 @@
         <module>server</module>
         <module>business</module>
         <module>generator</module>
+        <module>file</module>
     </modules>
 
     <groupId>com.zmq</groupId>
