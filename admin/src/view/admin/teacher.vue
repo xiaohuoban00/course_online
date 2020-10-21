@@ -85,16 +85,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <big-file v-bind:input-id="'image-upload'"
-                            v-bind:text="'上传头像'"
-                            v-bind:suffixs="['jpg', 'jpeg', 'png']"
-                            v-bind:use="FILE_USE.TEACHER.key"
-                            v-bind:after-upload="afterUpload"></big-file>
-                  <div v-show="teacher.image" class="row">
-                    <div class="col-md-4">
-                      <img v-bind:src="teacher.image" class="img-responsive">
-                    </div>
-                  </div>
+                  <input type="file" v-on:change = 'uploadImage()' id="file-upload-input">
+                  <img :src="teacher.image" class="img-responsive">
                 </div>
               </div>
               <div class="form-group">
@@ -128,7 +120,6 @@
 </template>
 
 <script>
-import Pagination from "../../components/pagination";
 export default {
   name: "business-teacher",
   data: function() {
@@ -231,11 +222,18 @@ export default {
         })
       });
     },
-
     afterUpload(resp) {
       let _this = this;
-      let image = resp.content.path;
-      _this.teacher.image = image;
+      _this.teacher.image = resp.content.path;
+    },
+    uploadImage(){
+      let _this = this;
+      let formData = new window.FormData();
+      formData.append('file',document.querySelector('#file-upload-input').files[0]);
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload',formData).then((response)=>{
+        let resp = response.data
+        _this.teacher.image = resp.content;
+      })
     }
   }
 }
