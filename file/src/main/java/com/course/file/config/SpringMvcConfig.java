@@ -12,11 +12,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SpringMvcConfig implements WebMvcConfigurer {
 
-    @Value("${file.domain}")
-    private String FILE_DOMAIN;
+    @Value("${file.path}")
+    private String FILE_PATH;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/f/**").addResourceLocations("file:"+FILE_DOMAIN);
+        registry.addResourceHandler("/f/**").addResourceLocations("file:"+FILE_PATH);
     }
 }

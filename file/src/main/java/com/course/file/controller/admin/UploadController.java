@@ -31,10 +31,10 @@ public class UploadController {
     public ResponseDto upload(@RequestParam MultipartFile file) throws IOException {
         String filename = file.getOriginalFilename();
         String key = UuidUtil.getShortUuid();
-        String fullPath = FILE_DOMAIN+key+"-"+filename;
+        String fullPath = FILE_PATH+key+"-"+filename;
         File dest = new File(fullPath);
         file.transferTo(dest);
-        String path = FILE_PATH+"f/"+key+"-"+filename;
+        String path = FILE_DOMAIN+"f/"+key+"-"+filename;
         return new ResponseDto(true, CodeEnum.SUCCESS.getCode(),null,path);
     }
 }

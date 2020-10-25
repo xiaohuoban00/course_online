@@ -62,7 +62,9 @@
 
       </div>
     </div>
-
+    <p style="float: right;margin-right: 20px">
+      <pagination ref="pagination" v-bind:list="list"></pagination>
+    </p>
     <div id="form-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -88,11 +90,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <button type="button" v-on:click="selectImage()" class="btn btn-white btn-default btn-round">
-                    <i class="ace-icon fa fa-upload"></i>
-                    上传头像
-                  </button>
-                  <input class="hidden" type="file" ref="file" v-on:change='uploadImage()' id="file-upload-input">
+                  <file v-bind:text="'上传头像'" v-bind:after-upload="afterUpload" v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
                       <img :src="teacher.image" class="img-responsive">
@@ -131,7 +129,10 @@
 </template>
 
 <script>
+import Pagination from "@/components/pagination";
+import File from "@/components/file";
 export default {
+  components: {Pagination,File},
   name: "business-teacher",
   data: function () {
     return {
@@ -142,7 +143,6 @@ export default {
   },
   mounted: function () {
     let _this = this;
-    _this.$refs.pagination.size = 5;
     _this.list(1);
     // sidebar激活样式方法一
     // this.$parent.activeSidebar("business-teacher-sidebar");
@@ -235,34 +235,7 @@ export default {
     },
     afterUpload(resp) {
       let _this = this;
-      _this.teacher.image = resp.content.path;
-    },
-    uploadImage() {
-      let _this = this;
-      let file = _this.$refs.file.file[0];
-      let formData = new window.FormData();
-      let suffixs = ['jpg', 'png', 'jpeg'];
-      let fileName = file.name;
-      let suffix = fileName.substring(fileName.lastIndexOf('.') + 1, fileName.length).toLowerCase();
-      let validateSuffix = false;
-      for (let i = 0; i < suffixs.length; i++) {
-        if (suffixs[i].toLowerCase() === suffix) {
-          validateSuffix = true;
-          break;
-        }
-      }
-      if (!validateSuffix) {
-        Toast.warning("文件格式不正确");
-        return;
-      }
-      formData.append('file', file);
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response) => {
-        let resp = response.data
-        _this.teacher.image = resp.content;
-      })
-    },
-    selectImage() {
-      $("#file-upload-input").trigger('click');
+      _this.teacher.image = resp.content;
     }
   }
 }
