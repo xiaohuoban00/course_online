@@ -1,9 +1,9 @@
-package com.course.${module}.controller.admin;
+package com.course.file.controller.admin;
 
-import com.course.server.dto.${Domain}Dto;
+import com.course.server.dto.FileDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
-import com.course.server.service.I${Domain}Service;
+import com.course.server.service.IFileService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -11,11 +11,11 @@ import javax.annotation.Resource;
 
 
 @RestController
-@RequestMapping("admin/${domain}")
-public class ${Domain}Controller {
+@RequestMapping("admin/file")
+public class FileController {
 
     @Resource
-    private I${Domain}Service ${domain}Service;
+    private IFileService fileService;
 
     /**
      * 查询列表
@@ -24,24 +24,24 @@ public class ${Domain}Controller {
      * @return
      */
     @PostMapping("list")
-    public ResponseDto list(@RequestBody PageDto<${Domain}Dto> pageDto) {
+    public ResponseDto list(@RequestBody PageDto<FileDto> pageDto) {
         ResponseDto responseDto = new ResponseDto();
         responseDto.setContent(pageDto);
-        ${domain}Service.list(pageDto);
+        fileService.list(pageDto);
         return responseDto;
     }
 
     /**
      * 保存，存在有id则更新
      *
-     * @param ${domain}Dto
+     * @param fileDto
      * @return
      */
     @PostMapping("save")
-    public ResponseDto save(@RequestBody ${Domain}Dto ${domain}Dto) {
-        ${domain}Service.save(${domain}Dto);
+    public ResponseDto save(@RequestBody FileDto fileDto) {
+        fileService.save(fileDto);
         ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(${domain}Dto);
+        responseDto.setContent(fileDto);
         return responseDto;
     }
 
@@ -53,7 +53,7 @@ public class ${Domain}Controller {
      */
     @DeleteMapping("delete/{id}")
     public ResponseDto delete(@PathVariable String id) {
-        ${domain}Service.delete(id);
+        fileService.delete(id);
         return new ResponseDto();
     }
 }

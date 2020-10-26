@@ -58,7 +58,7 @@ public class CourseServiceImpl implements ICourseService {
         } else {
             update(course);
         }
-        courseCategoryService.saveBatch(course.getId(),courseDto.getCategorys());
+        courseCategoryService.saveBatch(course.getId(), courseDto.getCategorys());
     }
 
     private void insert(Course course) {
@@ -83,19 +83,19 @@ public class CourseServiceImpl implements ICourseService {
     }
 
     @Override
-    public CourseContentDto findContent(String id){
+    public CourseContentDto findContent(String id) {
         CourseContent courseContent = courseContentMapper.selectByPrimaryKey(id);
-        if(courseContent==null){
+        if (courseContent == null) {
             return null;
         }
-        return CopyUtil.copy(courseContent,CourseContentDto.class);
+        return CopyUtil.copy(courseContent, CourseContentDto.class);
     }
 
     @Override
-    public int saveContent(CourseContentDto courseContentDto){
+    public int saveContent(CourseContentDto courseContentDto) {
         CourseContent courseContent = CopyUtil.copy(courseContentDto, CourseContent.class);
         int i = courseContentMapper.updateByPrimaryKeySelective(courseContent);
-        if(i==0){
+        if (i == 0) {
             i = courseContentMapper.insert(courseContent);
         }
         return i;
@@ -106,11 +106,11 @@ public class CourseServiceImpl implements ICourseService {
     public void sort(SortDto sortDto) {
         courseMapper.updateSort(sortDto);
         //如果排序值变大
-        if(sortDto.getNewSort()>sortDto.getOldSort()){
+        if (sortDto.getNewSort() > sortDto.getOldSort()) {
             courseMapper.moveSortsForward(sortDto);
         }
         //如果排序值变少
-        if(sortDto.getNewSort()<sortDto.getOldSort()){
+        if (sortDto.getNewSort() < sortDto.getOldSort()) {
             courseMapper.moveSortsBackward(sortDto);
         }
     }

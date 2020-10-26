@@ -11,4 +11,4 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 file:
   path: /Users/zengmingqi/Pictures/
-  domain: http://127.0.0.1:9000/file/
+  domain: http://127.0.0.1:9000/file/f/
