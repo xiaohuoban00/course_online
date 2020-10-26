@@ -5,6 +5,10 @@ server:
 spring:
   application:
     name: file
+  servlet:
+    multipart:
+      max-file-size: 50MB #单个文件的大小
+      max-request-size: 50MB #请求的大小
 eureka:
   client:
     service-url:

@@ -30,30 +30,4 @@ public class FileController {
         fileService.list(pageDto);
         return responseDto;
     }
-
-    /**
-     * 保存，存在有id则更新
-     *
-     * @param fileDto
-     * @return
-     */
-    @PostMapping("save")
-    public ResponseDto save(@RequestBody FileDto fileDto) {
-        fileService.save(fileDto);
-        ResponseDto responseDto = new ResponseDto();
-        responseDto.setContent(fileDto);
-        return responseDto;
-    }
-
-    /**
-     * 删除
-     *
-     * @param id
-     * @return
-     */
-    @DeleteMapping("delete/{id}")
-    public ResponseDto delete(@PathVariable String id) {
-        fileService.delete(id);
-        return new ResponseDto();
-    }
 }

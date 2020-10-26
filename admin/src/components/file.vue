@@ -22,6 +22,9 @@
       suffixs:{
         default: []
       },
+      use:{
+        default: ""
+      },
       afterUpload: {
         type: Function,
         default: null
@@ -53,6 +56,7 @@
           return;
         }
         formData.append('file', file);
+        formData.append('use',_this.use);
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', formData).then((response) => {
           let resp = response.data
           if(!resp.success){

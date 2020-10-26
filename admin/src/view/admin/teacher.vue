@@ -90,7 +90,7 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">头像</label>
                 <div class="col-sm-10">
-                  <file v-bind:text="'上传头像'" v-bind:after-upload="afterUpload" v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
+                  <file v-bind:text="'上传头像'" v-bind:use="FILE_USE.TEACHER.key" v-bind:after-upload="afterUpload" v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
                   <div v-show="teacher.image" class="row">
                     <div class="col-md-4">
                       <img :src="teacher.image" class="img-responsive">
@@ -235,7 +235,7 @@ export default {
     },
     afterUpload(resp) {
       let _this = this;
-      _this.teacher.image = resp.content;
+      _this.teacher.image = resp.content.path;
     }
   }
 }

@@ -39,9 +39,14 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">VOD</label>
+                <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <input type="text" v-model="section.vod" class="form-control">
+                  <file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload" v-bind:suffixs="['mp4']"></file>
+                  <div v-show="section.video" class="row">
+                    <div class="col-md-9">
+                      <video :src="section.video" controls="controls"></video>
+                    </div>
+                  </div>
                 </div>
               </div>
               <div class="form-group">
@@ -90,7 +95,7 @@
       <tr>
         <th>ID</th>
         <th>标题</th>
-        <th>VOD</th>
+        <th>视频</th>
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
@@ -102,7 +107,7 @@
       <tr v-for="(section,i) in sections" :key="i">
         <td>{{section.id}}</td>
         <td>{{section.title}}</td>
-        <td>{{section.vod}}</td>
+        <td>{{section.video}}</td>
         <td>{{section.time}}</td>
         <td>{{ CHARGE | optionKV(section.charge) }}</td>
         <td>{{section.sort}}</td>
@@ -130,9 +135,10 @@
 
 <script>
 import Pagination from "@/components/pagination";
+import File from "@/components/file";
 
 export default {
-  components: {Pagination},
+  components: {Pagination,File},
   name: "business-section",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
@@ -140,6 +146,7 @@ export default {
       section: {},
       sections: [],
       CHARGE:SECTION_CHARGE,
+      FILE_USE: FILE_USE,
       course:{},
       chapter:{}
     }
@@ -213,7 +220,19 @@ export default {
           Toast.warning(resp.message)
         }
       })
+    },
+    afterUpload(resp){
+      let _this = this;
+      _this.section.video = resp.content.path;
     }
   }
 }
 </script>
+
+<style scoped>
+video{
+  width: 100%;
+  height: auto;
+  margin-top: 10px;
+}
+</style>

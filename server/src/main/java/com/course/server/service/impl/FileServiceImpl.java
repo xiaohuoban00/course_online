@@ -26,7 +26,7 @@ public class FileServiceImpl implements IFileService {
     @Override
     public void list(PageDto<FileDto> pageDto) {
         Example example = new Example(File.class);
-        example.orderBy("id").desc();
+        example.orderBy("createdAt").desc();
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         List<File> fileList = fileMapper.selectByExample(example);
         PageInfo<File> pageInfo = new PageInfo<>(fileList);
