@@ -30,7 +30,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">封面</label>
                 <div class="col-sm-10">
-                  <file v-bind:text="'上传封面'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload" v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
+                  <file v-bind:text="'上传封面'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
                   <div v-show="course.image" class="row">
                     <div class="col-md-6">
                       <img :src="course.image" class="img-responsive">
@@ -282,7 +283,7 @@ import Pagination from "@/components/pagination";
 import File from "@/components/file"
 
 export default {
-  components: {Pagination,File},
+  components: {Pagination, File},
   name: "business-course",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
@@ -426,7 +427,28 @@ export default {
       _this.course = course
       $("#content").summernote({
         focus: true,
-        height: 300
+        height: 300,
+        lang: 'zh-CN',
+        callbacks: {
+          onImageUpload: function (files) {
+            //上传图片到服务器
+            let formData = new FormData();
+            formData.append('file', files[0]);
+            formData.append('use',FILE_USE.COURSE.key)
+            $.ajax({
+              url: process.env.VUE_APP_SERVER + '/file/admin/upload',//后台文件上传接口
+              type: 'POST',
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (resp) {
+                $('#content').summernote('insertImage', resp.content.path);
+              }, error: function () {
+                alert("上传失败");
+              }
+            });
+          }
+        }
       });
       $("#course-content-modal").modal("show")
       $("#content").summernote('code', '');
@@ -435,7 +457,6 @@ export default {
         if (resp.success) {
           $("#course-content-modal").modal({backdrop: 'static', keyboard: false});
           if (resp.content) {
-            console.log(resp);
             $("#content").summernote('code', resp.content.content);
           }
         } else {
@@ -456,6 +477,7 @@ export default {
         } else {
           Toast.warning(resp.message);
         }
+        $("#course-content-modal").modal("hide")
       })
     },
     openSortModal(course) {
@@ -495,7 +517,7 @@ export default {
         _this.teachers = resp.content
       })
     },
-    afterUpload(resp){
+    afterUpload(resp) {
       let _this = this;
       _this.course.image = resp.content.path;
     }
@@ -507,9 +529,10 @@ export default {
 .caption h3 {
   font-size: 20px;
 }
+
 /*增加自适应字体*/
-@media(max-width: 1199px) {
-  .caption h3{
+@media (max-width: 1199px) {
+  .caption h3 {
     font-size: 16px;
   }
 }

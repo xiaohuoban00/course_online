@@ -2,9 +2,9 @@
   <div>
     <h4 class="lighter">
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/course" class="pink"> {{course.name}} </router-link>
+      <router-link to="/business/course" class="pink"> {{ course.name }}</router-link>
       <i class="ace-icon fa fa-hand-o-right icon-animated-hand-pointer blue"></i>
-      <router-link to="/business/chapter" class="pink"> {{chapter.name}} </router-link>
+      <router-link to="/business/chapter" class="pink"> {{ chapter.name }}</router-link>
     </h4>
     <p>
       <router-link to="/business/chapter" class="btn btn-white btn-default btn-round">
@@ -41,10 +41,11 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload" v-bind:suffixs="['mp4']"></file>
+                  <file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['mp4']"></file>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
-                      <video :src="section.video" controls="controls"></video>
+                      <video :src="section.video" id="video" controls="controls"></video>
                     </div>
                   </div>
                 </div>
@@ -52,14 +53,14 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">时长</label>
                 <div class="col-sm-10">
-                  <input type="text" v-model="section.time" class="form-control">
+                  <p class="form-control-static">{{ section.time }}</p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
                   <select v-model="section.charge" class="form-control">
-                    <option v-for="(o,i) in CHARGE" :value="o.key" :key="i">{{o.value}}</option>
+                    <option v-for="(o,i) in CHARGE" :value="o.key" :key="i">{{ o.value }}</option>
                   </select>
                 </div>
               </div>
@@ -72,13 +73,13 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">大章名称</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{chapter.name}}</p>
+                  <p class="form-control-static">{{ chapter.name }}</p>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">课程名称</label>
                 <div class="col-sm-10">
-                  <p class="form-control-static">{{course.name}}</p>
+                  <p class="form-control-static">{{ course.name }}</p>
                 </div>
               </div>
             </form>
@@ -105,12 +106,12 @@
 
       <tbody>
       <tr v-for="(section,i) in sections" :key="i">
-        <td>{{section.id}}</td>
-        <td>{{section.title}}</td>
-        <td>{{section.video}}</td>
-        <td>{{section.time}}</td>
+        <td>{{ section.id }}</td>
+        <td>{{ section.title }}</td>
+        <td>{{ section.video }}</td>
+        <td>{{ section.time }}</td>
         <td>{{ CHARGE | optionKV(section.charge) }}</td>
-        <td>{{section.sort}}</td>
+        <td>{{ section.sort }}</td>
         <td class="center">
           <div class="hidden-sm hidden-xs btn-group">
 
@@ -138,25 +139,25 @@ import Pagination from "@/components/pagination";
 import File from "@/components/file";
 
 export default {
-  components: {Pagination,File},
+  components: {Pagination, File},
   name: "business-section",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
     return {
       section: {},
       sections: [],
-      CHARGE:SECTION_CHARGE,
+      CHARGE: SECTION_CHARGE,
       FILE_USE: FILE_USE,
-      course:{},
-      chapter:{}
+      course: {},
+      chapter: {}
     }
   },
   mounted() {
     let _this = this;
     _this.$parent.activeSidebar("business-course-sidebar");
-    let course =  SessionStorage.get(SESSION_KEY_COURSE) || {};
-    let chapter =  SessionStorage.get(SESSION_KEY_CHAPTER) || {};
-    if(Tool.isEmpty(course)||Tool.isEmpty(chapter)){
+    let course = SessionStorage.get(SESSION_KEY_COURSE) || {};
+    let chapter = SessionStorage.get(SESSION_KEY_CHAPTER) || {};
+    if (Tool.isEmpty(course) || Tool.isEmpty(chapter)) {
       _this.$router.push("/welcome");
     }
     _this.course = course;
@@ -177,12 +178,12 @@ export default {
     del(id) {
       let _this = this;
       Confirm.show("删除后不可恢复，确认删除?", function () {
-        _this.$ajax.delete(process.env.VUE_APP_SERVER+'/business/admin/section/delete/' + id).then((response) => {
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/business/admin/section/delete/' + id).then((response) => {
           let resp = response.data
           if (resp.success) {
             _this.list(1)
             Toast.success("删除成功")
-          }else {
+          } else {
             Toast.error(resp.message)
           }
         })
@@ -190,14 +191,14 @@ export default {
     },
     list: function (page) {
       let _this = this;
-      _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/list', {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/list', {
         page: page,
         size: _this.$refs.pagination.size,//$refs.组件别名:获取子组件
-        chapterId:_this.chapter.id,
-        courseId:_this.course.id
+        chapterId: _this.chapter.id,
+        courseId: _this.course.id
       }).then((response) => {
         let resp = response.data
-        if(resp.code==="500"){
+        if (resp.code === "500") {
           Toast.error(resp.message)
         }
         _this.sections = resp.content.list
@@ -209,7 +210,7 @@ export default {
       Loading.show();
       _this.section.chapterId = _this.chapter.id;
       _this.section.courseId = _this.course.id;
-      _this.$ajax.post(process.env.VUE_APP_SERVER+'/business/admin/section/save', _this.section).then((response) => {
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
         let resp = response.data
         Loading.hide();
         if (resp.success) {
@@ -221,16 +222,22 @@ export default {
         }
       })
     },
-    afterUpload(resp){
+    afterUpload(resp) {
       let _this = this;
       _this.section.video = resp.content.path;
+      _this.getTime()
+    },
+    getTime() {
+      let _this = this;
+      let ele = document.getElementById("video");
+      _this.section.time = parseInt(ele.duration, 10);
     }
   }
 }
 </script>
 
 <style scoped>
-video{
+video {
   width: 100%;
   height: auto;
   margin-top: 10px;
