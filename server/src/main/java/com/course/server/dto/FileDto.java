@@ -29,6 +29,19 @@ public class FileDto {
 
     private String vod;
 
+    /**
+     * base64
+     */
+    private String shard;
+
+    public String getShard() {
+        return shard;
+    }
+
+    public void setShard(String shard) {
+        this.shard = shard;
+    }
+
     public String getId() {
         return id;
     }
@@ -131,24 +144,5 @@ public class FileDto {
 
     public void setVod(String vod) {
         this.vod = vod;
-    }
-
-    @Override
-    public String toString() {
-        return "File{" +
-                "id='" + id + '\'' +
-                ", path='" + path + '\'' +
-                ", name='" + name + '\'' +
-                ", suffix='" + suffix + '\'' +
-                ", size=" + size +
-                ", use='" + use + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", shardIndex=" + shardIndex +
-                ", shardSize=" + shardSize +
-                ", shardTotal=" + shardTotal +
-                ", key='" + key + '\'' +
-                ", vod='" + vod + '\'' +
-                '}';
     }
 }

@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
@@ -39,11 +40,13 @@ public class FileServiceImpl implements IFileService {
     @Override
     @Transactional
     public void save(FileDto fileDto) {
-        File file = CopyUtil.copy(fileDto, File.class);
-        if (StringUtils.isEmpty(fileDto.getId())) {
+        File fileDb = selectByKey(fileDto.getKey());
+        if (fileDb == null) {
+            File file = CopyUtil.copy(fileDto, File.class);
             insert(file);
         } else {
-            update(file);
+            fileDb.setShardIndex(fileDto.getShardIndex());
+            update(fileDb);
         }
     }
 
@@ -61,5 +64,16 @@ public class FileServiceImpl implements IFileService {
     @Transactional
     public void delete(String id) {
         fileMapper.deleteByPrimaryKey(id);
+    }
+
+    private File selectByKey(String key){
+        Example example = new Example(File.class);
+        example.createCriteria().andEqualTo("key", key);
+        List<File> fileList = fileMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(fileList)){
+            return null;
+        }else {
+            return fileList.get(0);
+        }
     }
 }

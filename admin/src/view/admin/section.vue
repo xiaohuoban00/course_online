@@ -41,8 +41,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
-                        v-bind:suffixs="['mp4']"></file>
+                  <big-file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['mp4']"></big-file>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
                       <video :src="section.video" id="video" controls="controls"></video>
@@ -137,9 +137,10 @@
 <script>
 import Pagination from "@/components/pagination";
 import File from "@/components/file";
+import BigFile from "@/components/big-file";
 
 export default {
-  components: {Pagination, File},
+  components: {Pagination, File,BigFile},
   name: "business-section",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
