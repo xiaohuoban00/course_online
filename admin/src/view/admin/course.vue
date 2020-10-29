@@ -30,8 +30,8 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">封面</label>
                 <div class="col-sm-10">
-                  <file v-bind:text="'上传封面'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
-                        v-bind:suffixs="['jpg', 'png', 'jpeg']"></file>
+                  <big-file v-bind:text="'上传封面'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['jpg', 'png', 'jpeg']"></big-file>
                   <div v-show="course.image" class="row">
                     <div class="col-md-6">
                       <img :src="course.image" class="img-responsive">
@@ -280,10 +280,11 @@
 
 <script>
 import Pagination from "@/components/pagination";
-import File from "@/components/file"
+import File from "@/components/big-file"
+import BigFile from "@/components/big-file";
 
 export default {
-  components: {Pagination, File},
+  components: {BigFile, Pagination, File},
   name: "business-course",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {

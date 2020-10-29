@@ -63,10 +63,9 @@ public class Base64ToMultipartFile implements MultipartFile {
             String[] baseStrs = base64.split(",");
 
             BASE64Decoder decoder = new BASE64Decoder();
-            byte[] b = new byte[0];
-            b = decoder.decodeBuffer(baseStrs[1]);
+            byte[] b = decoder.decodeBuffer(baseStrs[1]);
 
-            for(int i = 0; i < b.length; ++i) {
+            for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {
                     b[i] += 256;
                 }

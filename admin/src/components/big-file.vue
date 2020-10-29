@@ -37,7 +37,7 @@ export default {
     uploadFile: function () {
       let _this = this;
       let file = _this.$refs.file.files[0];
-      let key = hex_md5(file);
+      let key = hex_md5(JSON.stringify(file));
       let key10 = parseInt(key, 16);
       let key62 = Tool._10to62(key10);
       let suffixs = _this.suffixs;
@@ -73,7 +73,33 @@ export default {
         'size': file.size,
         'key': key62
       }
-      _this.upload(param);
+      _this.check(param);
+    },
+    /**
+     * 检查文件状态
+     * @param param
+     */
+    check: function (param) {
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/file/admin/check/' + param.key).then((response) => {
+        let resp = response.data;
+        if (!resp.success) {
+          Toast.warning(resp.message);
+          return;
+        }
+        let obj = resp.content;
+        if (!obj) {
+          param.shardIndex = 1;
+        } else if (obj.shardIndex === obj.shardTotal) {
+          Toast.success("文件极速秒传成功");
+          _this.afterUpload(resp);
+          $("#" + _this.inputId + '-input').val('');
+          return;
+        } else {
+          param.shardIndex = obj.shardIndex + 1;
+        }
+        _this.upload(param);
+      })
     },
     upload: function (param) {
       let _this = this;
@@ -83,24 +109,25 @@ export default {
       let fileShard = _this.getFileShard(shardIndex, shardSize);
       //将图片转为base64来传输
       let fileReader = new FileReader();
+      Progress.show((shardIndex - 1) * 100 / shardTotal);
       fileReader.onload = function (e) {
         param.shard = e.target.result;
-        Loading.show();
         _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', param).then((response) => {
-          Loading.hide();
           let resp = response.data
           if (!resp.success) {
             Toast.warning(resp.message);
             return;
           }
+          Progress.show(shardIndex * 100 / shardTotal);
           if (shardIndex < shardTotal) {
             //上传下一个分片
             param.shardIndex = shardIndex + 1;
             _this.upload(param);
           } else {
+            Progress.hide();
             _this.afterUpload(resp)
+            $("#" + _this.inputId + '-input').val('');
           }
-          $("#" + _this.inputId + '-input').val('');
         })
       }
       fileReader.readAsDataURL(fileShard);

@@ -66,14 +66,19 @@ public class FileServiceImpl implements IFileService {
         fileMapper.deleteByPrimaryKey(id);
     }
 
-    private File selectByKey(String key){
+    private File selectByKey(String key) {
         Example example = new Example(File.class);
         example.createCriteria().andEqualTo("key", key);
         List<File> fileList = fileMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(fileList)){
+        if (CollectionUtils.isEmpty(fileList)) {
             return null;
-        }else {
+        } else {
             return fileList.get(0);
         }
+    }
+
+    @Override
+    public FileDto findByKey(String key) {
+        return CopyUtil.copy(selectByKey(key), FileDto.class);
     }
 }

@@ -90,5 +90,21 @@ public class UploadController {
             }
             outputStream.close();
         }
+        System.gc();
+        //删除分片
+        for (int i = 1; i <= shardTotal; i++) {
+            String filePath = FILE_PATH + path + "." + i;
+            File file = new File(filePath);
+            file.delete();
+        }
+    }
+
+    @GetMapping("check/{key}")
+    public ResponseDto check(@PathVariable String key) {
+        FileDto fileDto = fileService.findByKey(key);
+        if (fileDto != null) {
+            fileDto.setPath(FILE_DOMAIN + fileDto.getPath());
+        }
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, fileDto);
     }
 }

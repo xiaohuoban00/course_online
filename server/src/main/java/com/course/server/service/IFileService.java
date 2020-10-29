@@ -26,4 +26,12 @@ public interface IFileService {
      * @param id
      */
     void delete(String id);
+
+    /**
+     * 根据文件标识查询数据库记录
+     *
+     * @param key
+     * @return
+     */
+    FileDto findByKey(String key);
 }
