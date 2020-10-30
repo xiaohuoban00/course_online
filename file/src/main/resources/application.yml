@@ -13,6 +13,14 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+# 本地文件路径及地址配置
 file:
   path: /Users/zengmingqi/Pictures/
   domain: http://127.0.0.1:9000/file/f/
+# 阿里云OSS相关配置
+oss:
+  accessKeyId:
+  accessKeySecret:
+  endpoint:
+  bucket:
+  domain:

@@ -41,11 +41,11 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">视频</label>
                 <div class="col-sm-10">
-                  <big-file v-bind:text="'上传视频'" v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
-                        v-bind:suffixs="['mp4']"></big-file>
+                  <vod v-bind:use="FILE_USE.COURSE.key" v-bind:after-upload="afterUpload"
+                        v-bind:suffixs="['mp4']"></vod>
                   <div v-show="section.video" class="row">
                     <div class="col-md-9">
-                      <video :src="section.video" id="video" controls="controls"></video>
+                      <player v-bind:player-id="'form-player-div'" ref="player"></player>
                     </div>
                   </div>
                 </div>
@@ -54,6 +54,12 @@
                 <label class="col-sm-2 control-label">时长</label>
                 <div class="col-sm-10">
                   <p class="form-control-static">{{ section.time }}</p>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">VOD</label>
+                <div class="col-sm-10">
+                  <p class="form-control-static">{{ section.vod }}</p>
                 </div>
               </div>
               <div class="form-group">
@@ -96,7 +102,7 @@
       <tr>
         <th>ID</th>
         <th>标题</th>
-        <th>视频</th>
+        <th>vod</th>
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
@@ -108,12 +114,16 @@
       <tr v-for="(section,i) in sections" :key="i">
         <td>{{ section.id }}</td>
         <td>{{ section.title }}</td>
-        <td>{{ section.video }}</td>
+        <td>{{ section.vod }}</td>
         <td>{{ section.time }}</td>
         <td>{{ CHARGE | optionKV(section.charge) }}</td>
         <td>{{ section.sort }}</td>
-        <td class="center">
+        <td>
           <div class="hidden-sm hidden-xs btn-group">
+
+            <button @click="play(section)" class="btn btn-xs btn-info">
+              <i class="ace-icon fa fa-video-camera bigger-120"></i>
+            </button>
 
             <button @click="edit(section)" class="btn btn-xs btn-info">
               <i class="ace-icon fa fa-pencil bigger-120"></i>
@@ -131,6 +141,7 @@
     <p style="float: right;margin-right: 20px">
       <pagination ref="pagination" v-bind:list="list"></pagination>
     </p>
+    <modal-player ref="modalPlayer"></modal-player>
   </div>
 </template>
 
@@ -138,9 +149,12 @@
 import Pagination from "@/components/pagination";
 import File from "@/components/file";
 import BigFile from "@/components/big-file";
+import Vod from "@/components/vod"
+import Player from "@/components/player";
+import ModalPlayer from "@/components/modal-player"
 
 export default {
-  components: {Pagination, File,BigFile},
+  components: {ModalPlayer, Pagination, File,BigFile,Vod,Player},
   name: "business-section",
   //使用data定义的组件内的变量，可用于做双向数据的绑定，双向数据绑定是vue的核心功能之一
   data: function () {
@@ -211,6 +225,7 @@ export default {
       Loading.show();
       _this.section.chapterId = _this.chapter.id;
       _this.section.courseId = _this.course.id;
+      _this.section.video = "";
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/admin/section/save', _this.section).then((response) => {
         let resp = response.data
         Loading.hide();
@@ -226,12 +241,20 @@ export default {
     afterUpload(resp) {
       let _this = this;
       _this.section.video = resp.content.path;
-      _this.getTime()
+      _this.section.vod  = resp.content.vod;
+      _this.getTime();
+      _this.$refs.player.playUrl(_this.section.video);
     },
     getTime() {
       let _this = this;
-      let ele = document.getElementById("video");
-      _this.section.time = parseInt(ele.duration, 10);
+      setTimeout(function (){
+        let ele = document.getElementById("video");
+        _this.section.time = parseInt(ele.duration, 10);
+      },1000)
+    },
+    play(section){
+      let _this = this;
+      _this.$refs.modalPlayer.playVod(section.vod);
     }
   }
 }

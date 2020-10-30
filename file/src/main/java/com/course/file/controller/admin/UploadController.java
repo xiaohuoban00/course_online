@@ -1,5 +1,7 @@
 package com.course.file.controller.admin;
 
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.vod.model.v20170321.GetMezzanineInfoResponse;
 import com.course.server.dto.FileDto;
 import com.course.server.dto.ResponseDto;
 import com.course.server.enmus.CodeEnum;
@@ -7,7 +9,9 @@ import com.course.server.enmus.FileUseEnum;
 import com.course.server.service.IFileService;
 import com.course.server.utils.Base64ToMultipartFile;
 import com.course.server.utils.UuidUtil;
+import com.course.server.utils.VodUtil;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,6 +35,15 @@ public class UploadController {
 
     @Value("${file.path}")
     private String FILE_PATH;
+
+    @Value("${oss.domain}")
+    private String ossDomain;
+
+    @Value("${oss.accessKeyId}")
+    private String accessKeyId;
+
+    @Value("${oss.accessKeySecret}")
+    private String accessKeySecret;
 
     @Resource
     private IFileService fileService;
@@ -100,10 +113,17 @@ public class UploadController {
     }
 
     @GetMapping("check/{key}")
-    public ResponseDto check(@PathVariable String key) {
+    public ResponseDto check(@PathVariable String key) throws Exception{
         FileDto fileDto = fileService.findByKey(key);
         if (fileDto != null) {
-            fileDto.setPath(FILE_DOMAIN + fileDto.getPath());
+            if(StringUtils.isEmpty(fileDto.getVod())){
+                fileDto.setPath(ossDomain+fileDto.getPath());
+            }else {
+                DefaultAcsClient vodClient = VodUtil.initVodClient(accessKeyId, accessKeySecret);
+                GetMezzanineInfoResponse response = VodUtil.getMezzanineInfo(vodClient, fileDto.getVod());
+                String fileUrl = response.getMezzanine().getFileURL();
+                fileDto.setPath(fileUrl);
+            }
         }
         return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, fileDto);
     }

@@ -42,11 +42,6 @@
             <groupId>com.zmq</groupId>
             <artifactId>server</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

@@ -53,20 +53,20 @@
     </div><!-- /.modal -->
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
-      <tr class="center">
-        <th class="center">ID</th>
-        <th class="center">名称</th>
-        <th class="center">课程ID</th>
-        <th class="center">操作</th>
+      <tr>
+        <th>ID</th>
+        <th>名称</th>
+        <th>课程ID</th>
+        <th>操作</th>
       </tr>
       </thead>
 
       <tbody>
       <tr v-for="(chapter,i) in chapters" :key="i">
-        <td class="center">{{ chapter.id }}</td>
-        <td class="center">{{ chapter.name }}</td>
-        <td class="center">{{ chapter.courseId }}</td>
-        <td class="center">
+        <td>{{ chapter.id }}</td>
+        <td>{{ chapter.name }}</td>
+        <td>{{ chapter.courseId }}</td>
+        <td>
           <div class="hidden-sm hidden-xs btn-group">
 
             <button @click="toSection(chapter)" class="btn btn-white btn-xs btn-info btn-round">

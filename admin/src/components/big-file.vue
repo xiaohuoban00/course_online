@@ -25,6 +25,12 @@ export default {
     use: {
       default: ""
     },
+    shardSize: {
+      default: 50 * 1024
+    },
+    url: {
+      default: "oss-append"
+    },
     afterUpload: {
       type: Function,
       default: null
@@ -57,7 +63,8 @@ export default {
       }
       //文件分片
       //以20M为一个分片
-      let shardSize = 1024 * 1024 * 20;
+      //let shardSize = 1024 * 1024 * 20;
+      let shardSize = _this.shardSize
       //分片索引,1表示第一个分片
       let shardIndex = 1;
       let size = file.size;
@@ -112,7 +119,7 @@ export default {
       Progress.show((shardIndex - 1) * 100 / shardTotal);
       fileReader.onload = function (e) {
         param.shard = e.target.result;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append', param).then((response) => {
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/' + _this.url, param).then((response) => {
           let resp = response.data
           if (!resp.success) {
             Toast.warning(resp.message);
@@ -143,7 +150,8 @@ export default {
       return file.slice(start, end);
     },
     selectFile() {
-      $("#file-upload-input").trigger('click');
+      let _this = this;
+      $("#" + _this.inputId + "-input").trigger('click');
     }
   }
 }

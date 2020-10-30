@@ -30,7 +30,7 @@
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>{{ category.sort }}</td>
-            <td class="center">
+            <td>
               <div class="hidden-sm hidden-xs btn-group">
 
                 <button @click="edit(category)" class="btn btn-xs btn-info">
@@ -70,7 +70,7 @@
             <td>{{ category.id }}</td>
             <td>{{ category.name }}</td>
             <td>{{ category.sort }}</td>
-            <td class="center">
+            <td>
               <div class="hidden-sm hidden-xs btn-group">
 
                 <button @click="edit(category)" class="btn btn-xs btn-info">
