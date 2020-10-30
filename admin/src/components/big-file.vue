@@ -37,7 +37,7 @@ export default {
     uploadFile: function () {
       let _this = this;
       let file = _this.$refs.file.files[0];
-      let key = hex_md5(JSON.stringify(file));
+      let key = hex_md5(file.name + file.size + file.type);
       let key10 = parseInt(key, 16);
       let key62 = Tool._10to62(key10);
       let suffixs = _this.suffixs;
@@ -112,7 +112,7 @@ export default {
       Progress.show((shardIndex - 1) * 100 / shardTotal);
       fileReader.onload = function (e) {
         param.shard = e.target.result;
-        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/upload', param).then((response) => {
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/file/admin/oss-append', param).then((response) => {
           let resp = response.data
           if (!resp.success) {
             Toast.warning(resp.message);
