@@ -16,6 +16,15 @@ Object.keys(filter).forEach(key => {
     Vue.filter(key, filter[key])
 });
 
+//axios拦截器
+axios.interceptors.request.use(function (config){
+    let token = Tool.getLoginUser().token;
+    if(Tool.isNotEmpty(token)){
+        config.headers.token = token;
+    }
+    return config
+},error => {});
+
 //路由登录拦截
 router.beforeEach((to, form, next) => {
     if (to.matched.some(function (item) {
