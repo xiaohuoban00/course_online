@@ -16,6 +16,22 @@ Object.keys(filter).forEach(key => {
     Vue.filter(key, filter[key])
 });
 
+//路由登录拦截
+router.beforeEach((to, form, next) => {
+    if (to.matched.some(function (item) {
+        return item.meta.loginRequire
+    })) {
+        let loginUser = Tool.getLoginUser();
+        if (Tool.isEmpty(loginUser)) {
+            next('/login');
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+})
+
 new Vue({
     router,
     render: h => h(App),

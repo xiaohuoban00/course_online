@@ -27,37 +27,40 @@ export default new Router({
         component: Login
     }, {
         path: "/",
-        name:"admin",
+        name: "admin",
         component: Admin,
+        meta: {
+            loginRequire: true
+        },
         children: [{
             path: "welcome",
             name: "welcome",
             component: Welcome
-        },{
+        }, {
             path: "business/chapter",
             name: "business/chapter",
             component: Chapter
-        },{
+        }, {
             path: "business/section",
             name: "business/section",
             component: Section
-        },{
+        }, {
             path: "business/course",
             name: "business/course",
             component: Course
-        },{
+        }, {
             path: "business/category",
             name: "business/category",
             component: Category
-        },{
+        }, {
             path: "business/teacher",
             name: "business/teacher",
             component: Teacher
-        },{
+        }, {
             path: "file/file",
             name: "file/file",
             component: File
-        },{
+        }, {
             path: "system/user",
             name: "system/user",
             component: User
