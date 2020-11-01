@@ -628,7 +628,7 @@ export default {
     },
     logout:function (){
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout').then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/'+_this.loginUser.token).then((response)=>{
         let resp = response.data;
         if(resp.success){
           Tool.setLoginUser(null);

@@ -8,7 +8,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   redis:
     password: redis
-    database: 0
+    database: 1
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   configuration:
