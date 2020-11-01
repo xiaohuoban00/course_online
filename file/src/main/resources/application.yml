@@ -19,8 +19,8 @@ file:
   domain: http://127.0.0.1:9000/file/f/
 # 阿里云OSS相关配置
 oss:
-  accessKeyId:
-  accessKeySecret:
-  endpoint:
-  bucket:
-  domain:
+  accessKeyId: LTAI4GHkSEnq8jtRrwFxn6f2
+  accessKeySecret: 4hN9cmETaGhua8dV3Icdm3FH1fTix8
+  endpoint: https://oss-cn-guangzhou.aliyuncs.com
+  bucket: zmq000
+  domain: https://zmq000.oss-cn-guangzhou.aliyuncs.com/

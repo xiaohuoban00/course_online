@@ -9,6 +9,7 @@ import Course from './view/admin/course'
 import Category from "./view/admin/category"
 import Teacher from './view/admin/teacher'
 import File from './view/admin/file'
+import User from './view/admin/user'
 
 Vue.use(Router);
 
@@ -20,6 +21,9 @@ export default new Router({
         redirect: "/login"
     }, {
         path: "/login",
+        component: Login
+    }, {
+        path: "",
         component: Login
     }, {
         path: "/",
@@ -53,6 +57,10 @@ export default new Router({
             path: "file/file",
             name: "file/file",
             component: File
+        },{
+            path: "system/user",
+            name: "system/user",
+            component: User
         }]
     }]
 })

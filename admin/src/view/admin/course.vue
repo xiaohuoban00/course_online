@@ -437,7 +437,7 @@ export default {
             formData.append('file', files[0]);
             formData.append('use',FILE_USE.COURSE.key)
             $.ajax({
-              url: process.env.VUE_APP_SERVER + '/file/admin/upload',//后台文件上传接口
+              url: process.env.VUE_APP_SERVER + '/file/admin/oss-simple',//后台文件上传接口
               type: 'POST',
               data: formData,
               processData: false,

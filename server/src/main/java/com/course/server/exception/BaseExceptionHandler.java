@@ -17,10 +17,9 @@ public class BaseExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseDto handler(Exception e){
-        if(e instanceof ValidatorException){
+        if(e instanceof ServiceException){
         	//处理的业务逻辑
-            LOGGER.warn(e.getMessage());
-            return new ResponseDto(false, CodeEnum.BAD_REQUEST.getCode(), "请求参数异常",null);
+            return new ResponseDto(false, CodeEnum.BAD_REQUEST.getCode(), e.getMessage(),null);
         }
         LOGGER.error(e.getMessage(),e);
         return new ResponseDto(false, CodeEnum.ERROR.getCode(), "服务器内部错误",null);

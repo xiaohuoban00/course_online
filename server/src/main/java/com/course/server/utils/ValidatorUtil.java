@@ -1,6 +1,6 @@
 package com.course.server.utils;
 
-import com.course.server.exception.ValidatorException;
+import com.course.server.exception.ServiceException;
 import org.springframework.util.StringUtils;
 
 public class ValidatorUtil {
@@ -10,7 +10,7 @@ public class ValidatorUtil {
      */
     public static void require(Object str, String fieldName) {
         if (StringUtils.isEmpty(str)) {
-            throw new ValidatorException(fieldName + "不能为空");
+            throw new ServiceException(fieldName + "不能为空");
         }
     }
 
@@ -26,7 +26,7 @@ public class ValidatorUtil {
             length = str.length();
         }
         if (length < min || length > max) {
-            throw new ValidatorException(fieldName + "长度" + min + "~" + max + "位");
+            throw new ServiceException(fieldName + "长度" + min + "~" + max + "位");
         }
     }
 }
