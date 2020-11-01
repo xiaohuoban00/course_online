@@ -1,19 +1,15 @@
-package com.course.server.domain;
+package com.course.server.dto;
 
-import javax.persistence.Id;
-
-public class User {
-    
-    public final static String LOGIN_USER = "LOGIN_USER";
-    
-    @Id
+/**
+ * @author zmq
+ * @date 2020/11/1 3:13 下午
+ */
+public class LoginUserDto {
     private String id;
 
     private String loginName;
 
     private String name;
-
-    private String password;
 
     public String getId() {
         return id;
@@ -37,13 +33,5 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 }

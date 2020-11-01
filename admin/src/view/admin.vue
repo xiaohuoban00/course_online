@@ -288,33 +288,18 @@
                 <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo"/>
                 <span class="user-info">
 									<small>Welcome,</small>
-									Jason
+									{{ loginUser.name }}
 								</span>
 
                 <i class="ace-icon fa fa-caret-down"></i>
               </a>
 
               <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                <li>
-                  <a href="#">
-                    <i class="ace-icon fa fa-cog"></i>
-                    Settings
-                  </a>
-                </li>
 
                 <li>
-                  <a href="profile.html">
-                    <i class="ace-icon fa fa-user"></i>
-                    Profile
-                  </a>
-                </li>
-
-                <li class="divider"></li>
-
-                <li>
-                  <a href="#">
+                  <a @click="logout() " href="#">
                     <i class="ace-icon fa fa-power-off"></i>
-                    Logout
+                    退出登录
                   </a>
                 </li>
               </ul>
@@ -599,10 +584,16 @@
 <script>
 export default {
   name: "admin",
+  data:function (){
+    return {
+      loginUser: {}
+    }
+  },
   mounted: function () {
     let _this = this;
     _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar")
     $.getScript('/ace/assets/js/ace.min.js');
+    _this.loginUser =  Tool.getLoginUser();
   },
   //用于监听Vue实例中数据的变动
   watch: {
@@ -634,6 +625,18 @@ export default {
         parentLi.siblings().find("li").removeClass("active");
         parentLi.addClass("open active");
       }
+    },
+    logout:function (){
+      let _this = this;
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout').then((response)=>{
+        let resp = response.data;
+        if(resp.success){
+          Tool.setLoginUser(null);
+          _this.$router.push('/login');
+        }else {
+          Toast.warning(resp.message);
+        }
+      })
     }
   }
 }

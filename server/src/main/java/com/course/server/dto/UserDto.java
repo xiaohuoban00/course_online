@@ -1,6 +1,5 @@
 package com.course.server.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserDto {
     private String id;
@@ -8,7 +7,7 @@ public class UserDto {
     private String loginName;
 
     private String name;
-    @JsonIgnore
+
     private String password;
 
     public String getId() {

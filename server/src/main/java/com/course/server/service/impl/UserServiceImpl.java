@@ -1,6 +1,7 @@
 package com.course.server.service.impl;
 
 import com.course.server.domain.User;
+import com.course.server.dto.LoginUserDto;
 import com.course.server.dto.UserDto;
 import com.course.server.dto.PageDto;
 import com.course.server.exception.ServiceException;
@@ -82,5 +83,17 @@ public class UserServiceImpl implements IUserService {
         user.setId(userDto.getId());
         user.setPassword(userDto.getPassword());
         userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public LoginUserDto login(UserDto userDto) {
+        User user = new User();
+        user.setLoginName(userDto.getLoginName());
+        user.setPassword(userDto.getPassword());
+        User userDb = userMapper.selectOne(user);
+        if (userDb == null) {
+            throw new ServiceException("用户名或密码不正确");
+        }
+        return CopyUtil.copy(userDb, LoginUserDto.class);
     }
 }

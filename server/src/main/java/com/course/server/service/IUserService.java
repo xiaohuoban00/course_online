@@ -1,6 +1,7 @@
 package com.course.server.service;
 
 import com.course.server.domain.User;
+import com.course.server.dto.LoginUserDto;
 import com.course.server.dto.UserDto;
 import com.course.server.dto.PageDto;
 
@@ -42,4 +43,12 @@ public interface IUserService {
      * @param userDto
      */
     void savePassword(UserDto userDto);
+
+    /**
+     * 登录
+     *
+     * @param userDto
+     * @return
+     */
+    LoginUserDto login(UserDto userDto);
 }
