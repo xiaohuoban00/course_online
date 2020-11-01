@@ -41,6 +41,17 @@
 														</span>
                           </label>
 
+                          <label class="block clearfix">
+                          <span class="block input-icon input-icon-right">
+                            <div class="input-group">
+                              <input v-model="user.imageCode" type="text" class="form-control" placeholder="验证码">
+                              <span class="input-group-addon" id="basic-addon2">
+                                <img v-on:click="loadImageCode()" id="image-code" alt="验证码"/>
+                              </span>
+                            </div>
+                          </span>
+                          </label>
+
                           <div class="space"></div>
 
                           <div class="clearfix">
@@ -86,11 +97,13 @@ export default {
     if (rememberUser) {
       _this.user = rememberUser
     }
+    _this.loadImageCode();
   },
   data: function () {
     return {
       user: {},
-      remember: true
+      remember: true,
+      imageCodeToken: ""
     }
   },
   methods: {
@@ -102,6 +115,7 @@ export default {
       if (rememberUser == null || rememberUser.md5 !== md5) {
         _this.user.password = hex_md5(passwordShow + KEY);
       }
+      _this.user.imageCodeToken = _this.imageCodeToken;
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/login', _this.user).then((response) => {
         let resp = response.data;
         let loginUser = resp.content;
@@ -120,14 +134,26 @@ export default {
           _this.$router.push('/welcome');
         } else {
           _this.user.password = null;
+          _this.loadImageCode();
           Toast.warning(resp.message);
         }
       })
+    },
+    /**
+     * 加载图形验证码
+     */
+    loadImageCode: function () {
+      let _this = this;
+      _this.imageCodeToken = Tool.uuid(8);
+      $('#image-code').attr('src', process.env.VUE_APP_SERVER + '/system/admin/kaptcha/image-code/' + _this.imageCodeToken);
     }
   }
 }
 </script>
 
-<style scoped>
 
+<style scoped>
+.input-group-addon {
+  padding: 0;
+}
 </style>

@@ -10,6 +10,32 @@ public class UserDto {
 
     private String password;
 
+    /**
+     * 图片验证码
+     */
+    private String imageCode;
+
+    /**
+     * 图片验证码token
+     */
+    private String imageCodeToken;
+
+    public String getImageCode() {
+        return imageCode;
+    }
+
+    public void setImageCode(String imageCode) {
+        this.imageCode = imageCode;
+    }
+
+    public String getImageCodeToken() {
+        return imageCodeToken;
+    }
+
+    public void setImageCodeToken(String imageCodeToken) {
+        this.imageCodeToken = imageCodeToken;
+    }
+
     public String getId() {
         return id;
     }
