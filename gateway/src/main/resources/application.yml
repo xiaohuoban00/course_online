@@ -3,6 +3,9 @@ server:
 spring:
   application:
     name: gateway
+  redis:
+    password: redis
+    database: 1
   cloud:
     gateway:
       routes:
@@ -10,14 +13,20 @@ spring:
           uri: lb://system
           predicates:
             - Path=/system/**
+          filters:
+            - LoginAdmin
         - id: business
           uri: lb://business
           predicates:
             - Path=/business/**
+          filters:
+            - LoginAdmin
         - id: file
           uri: lb://file
           predicates:
             - Path=/file/**
+          filters:
+            - LoginAdmin
 eureka:
   client:
     service-url:

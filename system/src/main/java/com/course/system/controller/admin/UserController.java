@@ -1,5 +1,6 @@
 package com.course.system.controller.admin;
 
+import com.alibaba.fastjson.JSON;
 import com.course.server.domain.User;
 import com.course.server.dto.LoginUserDto;
 import com.course.server.dto.UserDto;
@@ -27,7 +28,7 @@ public class UserController {
     private IUserService userService;
 
     @Resource
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 查询列表
@@ -90,7 +91,7 @@ public class UserController {
         ValidatorUtil.require(userDto.getImageCode(), "验证码");
         ResponseDto responseDto = new ResponseDto();
         userDto.setPassword(DigestUtils.md5DigestAsHex(userDto.getPassword().getBytes()));
-        String imageCode = redisTemplate.opsForValue().get(userDto.getImageCodeToken());
+        String imageCode = (String) redisTemplate.opsForValue().get(userDto.getImageCodeToken());
         if (StringUtils.isEmpty(imageCode)) {
             responseDto.setSuccess(false);
             responseDto.setMessage("验证码已过期");
@@ -103,7 +104,7 @@ public class UserController {
             LoginUserDto dto = userService.login(userDto);
             String token = UuidUtil.getUuid();
             dto.setToken(token);
-            redisTemplate.opsForValue().set(token, dto.toString(), 3600, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(token, JSON.toJSONString(dto), 3600, TimeUnit.SECONDS);
             responseDto.setSuccess(true);
             responseDto.setContent(dto);
             redisTemplate.delete(userDto.getImageCodeToken());

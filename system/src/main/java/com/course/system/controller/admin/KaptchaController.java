@@ -26,7 +26,7 @@ public class KaptchaController {
     private DefaultKaptcha defaultKaptcha;
 
     @Resource
-    public RedisTemplate<String,String> redisTemplate;
+    public RedisTemplate<String,Object> redisTemplate;
 
     @GetMapping("/image-code/{imageCodeToken}")
     public void imageCode(@PathVariable(value = "imageCodeToken") String imageCodeToken, HttpServletRequest request, HttpServletResponse response) throws Exception{
