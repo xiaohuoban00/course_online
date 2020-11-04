@@ -1,9 +1,14 @@
 package com.course.server.service.impl;
 
 import com.course.server.domain.Role;
+import com.course.server.domain.RoleResource;
+import com.course.server.domain.RoleUser;
 import com.course.server.dto.RoleDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.RoleUserDto;
 import com.course.server.mapper.RoleMapper;
+import com.course.server.mapper.RoleResourceMapper;
+import com.course.server.mapper.RoleUserMapper;
 import com.course.server.service.IRoleService;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
@@ -15,6 +20,7 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -22,6 +28,12 @@ import java.util.List;
 public class RoleServiceImpl implements IRoleService {
     @Resource
     private RoleMapper roleMapper;
+
+    @Resource
+    private RoleResourceMapper roleResourceMapper;
+
+    @Resource
+    private RoleUserMapper roleUserMapper;
 
     @Override
     public void list(PageDto<RoleDto> pageDto) {
@@ -61,5 +73,66 @@ public class RoleServiceImpl implements IRoleService {
     @Transactional
     public void delete(String id) {
         roleMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    @Transactional
+    public void saveResource(RoleDto roleDto) {
+        String id = roleDto.getId();
+        List<String> resourceIds = roleDto.getResourceIds();
+        Example example = new Example(RoleResource.class);
+        example.createCriteria().andEqualTo("roleId",id);
+        roleResourceMapper.deleteByExample(example);
+        RoleResource roleResource;
+        for (String resourceId : resourceIds) {
+            roleResource = new RoleResource();
+            roleResource.setId(UuidUtil.getShortUuid());
+            roleResource.setResourceId(resourceId);
+            roleResource.setRoleId(id);
+            roleResourceMapper.insert(roleResource);
+        }
+    }
+
+    @Override
+    public List<String> listResource(String id) {
+        Example example = new Example(RoleResource.class);
+        example.createCriteria().andEqualTo("roleId",id);
+        List<RoleResource> roleResourceList = roleResourceMapper.selectByExample(example);
+        List<String> resourceIdList = new ArrayList<>();
+        for (RoleResource roleResource : roleResourceList) {
+            resourceIdList.add(roleResource.getResourceId());
+        }
+        return resourceIdList;
+    }
+
+    @Override
+    @Transactional
+    public void saveUser(RoleUserDto roleUserDto) {
+        String roleId = roleUserDto.getId();
+        List<String> userIds = roleUserDto.getUserIds();
+        Example example = new Example(RoleUser.class);
+        example.createCriteria()
+                .andEqualTo("roleId",roleId);
+        roleResourceMapper.deleteByExample(example);
+        RoleUser roleUser;
+        for (String userId : userIds) {
+            roleUser = new RoleUser();
+            roleUser.setId(UuidUtil.getShortUuid());
+            roleUser.setRoleId(roleId);
+            roleUser.setUserId(userId);
+            roleUserMapper.insert(roleUser);
+        }
+    }
+
+    @Override
+    public List<String> listUser(String id) {
+        Example example = new Example(RoleUser.class);
+        example.createCriteria().andEqualTo("roleId",id);
+        List<RoleUser> roleUserList = roleUserMapper.selectByExample(example);
+        List<String> userIdList = new ArrayList<>();
+        for (RoleUser roleUser : roleUserList) {
+            userIdList.add(roleUser.getUserId());
+        }
+        return userIdList;
     }
 }

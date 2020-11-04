@@ -3,11 +3,13 @@ package com.course.system.controller.admin;
 import com.course.server.dto.RoleDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.ResponseDto;
+import com.course.server.dto.RoleUserDto;
+import com.course.server.enmus.CodeEnum;
 import com.course.server.service.IRoleService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-
+import java.util.List;
 
 
 @RestController
@@ -55,5 +57,52 @@ public class RoleController {
     public ResponseDto delete(@PathVariable String id) {
         roleService.delete(id);
         return new ResponseDto();
+    }
+
+    /**
+     * 保存资源
+     *
+     * @return
+     */
+    @PostMapping("save-resource")
+    public ResponseDto saveResource(@RequestBody RoleDto roleDto) {
+        roleService.saveResource(roleDto);
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, roleDto);
+    }
+
+    /**
+     * 查询已关联的资源
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("list-resource/{id}")
+    public ResponseDto listResource(@PathVariable String id) {
+        List<String> resourceIdList = roleService.listResource(id);
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, resourceIdList);
+    }
+
+    /**
+     * 保存用户
+     *
+     * @param roleUserDto
+     * @return
+     */
+    @PostMapping("save-user")
+    public ResponseDto saveUser(@RequestBody RoleUserDto roleUserDto) {
+        roleService.saveUser(roleUserDto);
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, roleUserDto);
+    }
+
+    /**
+     * 加载用户
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("list-user/{id}")
+    public ResponseDto listUser(@PathVariable String id){
+        List<String> userIdList = roleService.listUser(id);
+        return new ResponseDto(true, CodeEnum.SUCCESS.getCode(), null, userIdList);
     }
 }

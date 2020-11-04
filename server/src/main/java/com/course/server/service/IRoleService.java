@@ -2,6 +2,9 @@ package com.course.server.service;
 
 import com.course.server.dto.RoleDto;
 import com.course.server.dto.PageDto;
+import com.course.server.dto.RoleUserDto;
+
+import java.util.List;
 
 
 public interface IRoleService {
@@ -26,4 +29,34 @@ public interface IRoleService {
      * @param id
      */
     void delete(String id);
+
+    /**
+     * 保存资源
+     *
+     * @param roleDto
+     */
+    void saveResource(RoleDto roleDto);
+
+    /**
+     * 查询已关联的资源
+     *
+     * @param id
+     * @return
+     */
+    List<String> listResource(String id);
+
+    /**
+     * 保存用户
+     *
+     * @param roleUserDto
+     */
+    void saveUser(RoleUserDto roleUserDto);
+
+    /**
+     * 加载用户
+     *
+     * @param id
+     * @return
+     */
+    List<String> listUser(String id);
 }

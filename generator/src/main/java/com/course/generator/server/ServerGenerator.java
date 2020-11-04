@@ -17,8 +17,8 @@ public class ServerGenerator {
     static String toMapperPath = "server/src/main/java/com/course/server/mapper/";
 
     public static void main(String[] args) throws Exception{
-        String Domain = "Role";
-        String domain = "role";
+        String Domain = "RoleUser";
+        String domain = "roleUser";
         String module = "system";
         Map<String,Object> map = new HashMap<>();
         map.put("Domain",Domain);

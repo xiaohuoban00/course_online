@@ -1,12 +1,24 @@
 package com.course.server.dto;
 
 
+import java.util.List;
+
 public class RoleDto {
     private String id;
 
     private String name;
 
     private String desc;
+
+    private List<String> resourceIds;
+
+    public List<String> getResourceIds() {
+        return resourceIds;
+    }
+
+    public void setResourceIds(List<String> resourceIds) {
+        this.resourceIds = resourceIds;
+    }
 
     public String getId() {
         return id;
