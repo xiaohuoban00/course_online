@@ -52,7 +52,6 @@ public class ResourceServiceImpl implements IResourceService {
     }
 
     private void insert(Resource resource) {
-        resource.setId(UuidUtil.getShortUuid());
         resourceMapper.insert(resource);
     }
 
