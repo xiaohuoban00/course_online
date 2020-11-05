@@ -48,9 +48,7 @@ export default {
      */
     list() {
       let _this = this;
-      Loading.show();
       _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree').then((res)=>{
-        Loading.hide();
         let response = res.data;
         _this.resources = response.content;
         // 初始化树

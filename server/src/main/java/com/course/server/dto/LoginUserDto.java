@@ -1,5 +1,8 @@
 package com.course.server.dto;
 
+import java.util.List;
+import java.util.Set;
+
 /**
  * @author zmq
  * @date 2020/11/1 3:13 下午
@@ -12,6 +15,32 @@ public class LoginUserDto {
     private String name;
 
     private String token;
+
+    /**
+     * 所有资源，用于界面的控制
+     */
+    private List<ResourceDto> resources;
+
+    /**
+     * 资源中所有的请求
+     */
+    private Set<String> requests;
+
+    public List<ResourceDto> getResources() {
+        return resources;
+    }
+
+    public void setResources(List<ResourceDto> resources) {
+        this.resources = resources;
+    }
+
+    public Set<String> getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Set<String> requests) {
+        this.requests = requests;
+    }
 
     public String getToken() {
         return token;

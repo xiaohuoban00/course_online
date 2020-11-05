@@ -1,7 +1,9 @@
 package com.course.server.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.course.server.domain.User;
 import com.course.server.dto.LoginUserDto;
+import com.course.server.dto.ResourceDto;
 import com.course.server.dto.UserDto;
 import com.course.server.dto.PageDto;
 import com.course.server.exception.ServiceException;
@@ -13,11 +15,14 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Service
@@ -94,6 +99,29 @@ public class UserServiceImpl implements IUserService {
         if (userDb == null) {
             throw new ServiceException("用户名或密码不正确");
         }
-        return CopyUtil.copy(userDb, LoginUserDto.class);
+        LoginUserDto loginUserDto = CopyUtil.copy(userDb, LoginUserDto.class);
+        setAuth(loginUserDto);
+        return loginUserDto;
+    }
+
+    /**
+     * 为登录用户读取权限
+     */
+    private void setAuth(LoginUserDto loginUserDto) {
+        List<ResourceDto> resourceDtoList = userMapper.findResources(loginUserDto.getId());
+        loginUserDto.setResources(resourceDtoList);
+
+        // 整理所有有权限的请求，用于接口拦截
+        Set<String> requestSet = new HashSet<>();
+        if (!CollectionUtils.isEmpty(resourceDtoList)) {
+            for (ResourceDto resourceDto : resourceDtoList) {
+                String arrayString = resourceDto.getRequest();
+                List<String> requestList = JSON.parseArray(arrayString, String.class);
+                if (!CollectionUtils.isEmpty(requestList)) {
+                    requestSet.addAll(requestList);
+                }
+            }
+        }
+        loginUserDto.setRequests(requestSet);
     }
 }

@@ -353,7 +353,7 @@
             <b class="arrow"></b>
           </li>
 
-          <li class="">
+          <li v-show="hasResource('01')" class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 系统管理 </span>
@@ -364,7 +364,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="" id="system-user-sidebar">
+              <li v-show="hasResource('0101')" class="" id="system-user-sidebar">
                 <router-link to="/system/user">
                   <i class="menu-icon fa fa-caret-right"></i>
                   用户管理
@@ -373,7 +373,7 @@
                 <b class="arrow"></b>
               </li>
 
-              <li class="" id="system-resource-sidebar">
+              <li v-show="hasResource('0102')" class="" id="system-resource-sidebar">
                 <router-link to="/system/resource">
                   <i class="menu-icon fa fa-caret-right"></i>
                   资源管理
@@ -382,7 +382,7 @@
                 <b class="arrow"></b>
               </li>
 
-              <li class="" id="system-role-sidebar">
+              <li v-show="hasResource('0103')" class="" id="system-role-sidebar">
                 <router-link to="/system/role">
                   <i class="menu-icon fa fa-caret-right"></i>
                   角色管理
@@ -392,10 +392,11 @@
               </li>
             </ul>
           </li>
-          <li class="">
+
+          <li v-show="hasResource('02')" class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
-              <span class="menu-text"> 业务管理  </span>
+              <span class="menu-text"> 业务管理 </span>
 
               <b class="arrow fa fa-angle-down"></b>
             </a>
@@ -403,7 +404,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="" id="business-category-sidebar">
+              <li v-show="hasResource('0201')" class="" id="business-category-sidebar">
                 <router-link to="/business/category">
                   <i class="menu-icon fa fa-caret-right"></i>
                   分类管理
@@ -411,43 +412,46 @@
 
                 <b class="arrow"></b>
               </li>
-              <li class="" id="business-course-sidebar">
+              <li v-show="hasResource('0202')" class="" id="business-course-sidebar">
                 <router-link to="/business/course">
                   <i class="menu-icon fa fa-caret-right"></i>
                   课程管理
                 </router-link>
+
                 <b class="arrow"></b>
               </li>
-              <li class="" id="business-teacher-sidebar">
+              <li v-show="hasResource('0203')" class="" id="business-teacher-sidebar">
                 <router-link to="/business/teacher">
                   <i class="menu-icon fa fa-caret-right"></i>
                   讲师管理
                 </router-link>
+
                 <b class="arrow"></b>
               </li>
-              <!--<li class="" id="business-chapter-sidebar">
-                <router-link to="/business/chapter">
+              <li v-show="hasResource('0204')" class="" id="business-member-sidebar">
+                <router-link to="/business/member">
                   <i class="menu-icon fa fa-caret-right"></i>
-                  大章管理
+                  会员管理
+                </router-link>
+
+                <b class="arrow"></b>
+              </li>
+              <li v-show="hasResource('0205')" class="" id="business-sms-sidebar">
+                <router-link to="/business/sms">
+                  <i class="menu-icon fa fa-caret-right"></i>
+                  短信管理
                 </router-link>
 
                 <b class="arrow"></b>
               </li>
 
-              <li class="" id="business-section-sidebar">
-                <router-link to="/business/section">
-                  <i class="menu-icon fa fa-caret-right"></i>
-                  小节管理
-                </router-link>
-
-                <b class="arrow"></b>
-              </li>-->
             </ul>
           </li>
-          <li class="">
+
+          <li v-show="hasResource('03')" class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
-              <span class="menu-text"> 文件管理  </span>
+              <span class="menu-text"> 文件管理 </span>
 
               <b class="arrow fa fa-angle-down"></b>
             </a>
@@ -455,7 +459,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="" id="file-file-sidebar">
+              <li v-show="hasResource('0301')" class="" id="file-file-sidebar">
                 <router-link to="/file/file">
                   <i class="menu-icon fa fa-caret-right"></i>
                   文件管理
@@ -463,6 +467,7 @@
 
                 <b class="arrow"></b>
               </li>
+
             </ul>
           </li>
 
@@ -603,12 +608,20 @@ export default {
     _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar")
     $.getScript('/ace/assets/js/ace.min.js');
     _this.loginUser =  Tool.getLoginUser();
+
+    if (!_this.hasResourceRouter(_this.$route.name)) {
+      _this.$router.push("/login");
+    }
   },
   //用于监听Vue实例中数据的变动
   watch: {
     $route: {
       handler: function (val, oldVal) {
         let _this = this;
+        if (!_this.hasResourceRouter(val.name)) {
+          _this.$router.push("/login");
+          return;
+        }
         //页面加载完成后执行
         _this.$nextTick(function () {
           _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar")
@@ -617,6 +630,22 @@ export default {
     }
   },
   methods: {
+    /**
+     * 查找是否有权限
+     * @param router
+     */
+    hasResourceRouter(router) {
+      let resources = Tool.getLoginUser().resources;
+      if (Tool.isEmpty(resources)) {
+        return false;
+      }
+      for (let i = 0; i < resources.length; i++) {
+        if (router === resources[i].page) {
+          return true;
+        }
+      }
+      return false;
+    },
     /**
      * 菜单激活样式，id是当前点击的菜单的id
      * @param id
@@ -634,6 +663,13 @@ export default {
         parentLi.siblings().find("li").removeClass("active");
         parentLi.addClass("open active");
       }
+    },
+    /**
+     * 查找是否有权限
+     * @param id
+     */
+    hasResource(id) {
+      return Tool.hasResource(id);
     },
     logout:function (){
       let _this = this;

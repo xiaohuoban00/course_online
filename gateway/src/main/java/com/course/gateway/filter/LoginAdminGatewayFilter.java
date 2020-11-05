@@ -1,6 +1,8 @@
 package com.course.gateway.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -21,8 +23,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LoginAdminGatewayFilter.class);
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -48,6 +48,22 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         } else {
+            boolean exist = false;
+            JSONObject loginUserDto = JSON.parseObject(String.valueOf(object));
+            JSONArray requests = loginUserDto.getJSONArray("requests");
+            // 遍历所有【权限请求】，判断当前请求的地址是否在【权限请求】里
+            for (Object o : requests) {
+                String request = (String) o;
+                if (path.contains(request)) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
+
             return chain.filter(exchange);
         }
     }
