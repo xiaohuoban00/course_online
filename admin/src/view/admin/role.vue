@@ -26,9 +26,9 @@
 
       <tbody>
       <tr v-for="role in roles">
-        <td>{{role.id}}</td>
-        <td>{{role.name}}</td>
-        <td>{{role.desc}}</td>
+        <td>{{ role.id }}</td>
+        <td>{{ role.name }}</td>
+        <td>{{ role.desc }}</td>
         <td>
           <div class="hidden-sm hidden-xs btn-group">
             <button v-on:click="editUser(role)" class="btn btn-xs btn-info">
@@ -53,7 +53,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">表单</h4>
           </div>
           <div class="modal-body">
@@ -85,7 +86,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">角色资源关联配置</h4>
           </div>
           <div class="modal-body">
@@ -110,7 +112,8 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
             <h4 class="modal-title">角色用户关联配置</h4>
           </div>
           <div class="modal-body">
@@ -119,7 +122,7 @@
                 <table id="user-table" class="table table-hover">
                   <tbody>
                   <tr v-for="user in users">
-                    <td>{{user.loginName}}</td>
+                    <td>{{ user.loginName }}</td>
                     <td class="text-right">
                       <a v-on:click="addUser(user)" href="javascript:;" class="">
                         <i class="ace-icon fa fa-arrow-circle-right blue"></i>
@@ -133,7 +136,7 @@
                 <table id="role-user-table" class="table table-hover">
                   <tbody>
                   <tr v-for="user in roleUsers">
-                    <td>{{user.loginName}}</td>
+                    <td>{{ user.loginName }}</td>
                     <td class="text-right">
                       <a v-on:click="deleteUser(user)" href="javascript:;" class="">
                         <i class="ace-icon fa fa-trash blue"></i>
@@ -163,10 +166,11 @@
 
 <script>
 import Pagination from "../../components/pagination";
+
 export default {
   components: {Pagination},
   name: "system-role",
-  data: function() {
+  data: function () {
     return {
       role: {},
       roles: [],
@@ -176,7 +180,7 @@ export default {
       roleUsers: []
     }
   },
-  mounted: function() {
+  mounted: function () {
     let _this = this;
     _this.$refs.pagination.size = 5;
     _this.list(1);
@@ -211,7 +215,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/list', {
         page: page,
         size: _this.$refs.pagination.size,
-      }).then((response)=>{
+      }).then((response) => {
         let resp = response.data;
         _this.roles = resp.content.list;
         _this.$refs.pagination.render(page, resp.content.total);
@@ -236,7 +240,7 @@ export default {
       }
 
       Loading.show();
-      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/save', _this.role).then((response)=>{
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/save', _this.role).then((response) => {
         Loading.hide();
         let resp = response.data;
         if (resp.success) {
@@ -256,7 +260,7 @@ export default {
       let _this = this;
       Confirm.show("删除角色后不可恢复，确认删除？", function () {
         Loading.show();
-        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/role/delete/' + id).then((response)=>{
+        _this.$ajax.delete(process.env.VUE_APP_SERVER + '/system/admin/role/delete/' + id).then((response) => {
           Loading.hide();
           let resp = response.data;
           if (resp.success) {
@@ -283,7 +287,7 @@ export default {
     loadResource() {
       let _this = this;
       Loading.show();
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree').then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/resource/load-tree').then((res) => {
         Loading.hide();
         let response = res.data;
         _this.resources = response.content;
@@ -333,7 +337,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/save-resource', {
         id: _this.role.id,
         resourceIds: resourceIds
-      }).then((response)=>{
+      }).then((response) => {
         let resp = response.data;
         if (resp.success) {
           Toast.success("保存成功!");
@@ -348,7 +352,7 @@ export default {
      */
     listRoleResource() {
       let _this = this;
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/role/list-resource/' + _this.role.id).then((response)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/role/list-resource/' + _this.role.id).then((response) => {
         let resp = response.data;
         let resources = resp.content;
 
@@ -379,7 +383,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/user/list', {
         page: 1,
         size: 9999
-      }).then((response)=>{
+      }).then((response) => {
         let resp = response.data;
         if (resp.success) {
           _this.users = resp.content.list;
@@ -430,7 +434,7 @@ export default {
       _this.$ajax.post(process.env.VUE_APP_SERVER + '/system/admin/role/save-user', {
         id: _this.role.id,
         userIds: userIds
-      }).then((response)=>{
+      }).then((response) => {
         console.log("保存角色用户结果：", response);
         let resp = response.data;
         if (resp.success) {
@@ -447,7 +451,7 @@ export default {
     listRoleUser() {
       let _this = this;
       _this.roleUsers = [];
-      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/role/list-user/' + _this.role.id).then((res)=>{
+      _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/role/list-user/' + _this.role.id).then((res) => {
         let response = res.data;
         let userIds = response.content;
 

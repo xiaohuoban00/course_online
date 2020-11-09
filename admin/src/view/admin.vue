@@ -639,6 +639,9 @@ export default {
       if (Tool.isEmpty(resources)) {
         return false;
       }
+      if(router==="welcome"){
+        return true;
+      }
       for (let i = 0; i < resources.length; i++) {
         if (router === resources[i].page) {
           return true;
