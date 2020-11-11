@@ -3,6 +3,7 @@ package com.course.server.service.impl;
 import com.course.server.domain.Course;
 import com.course.server.domain.CourseContent;
 import com.course.server.dto.*;
+import com.course.server.enmus.CourseStatusEnum;
 import com.course.server.mapper.CategoryMapper;
 import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
@@ -115,4 +116,13 @@ public class CourseServiceImpl implements ICourseService {
         }
     }
 
+    @Override
+    public List<CourseDto> listNew(PageDto<CourseDto> pageDto) {
+        Example example = new Example(Course.class);
+        example.orderBy("createAt").desc();
+        example.createCriteria().andEqualTo("status", CourseStatusEnum.PUBLISH.getCode());
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+        List<Course> courseList = courseMapper.selectByExample(example);
+        return CopyUtil.copyList(courseList,CourseDto.class);
+    }
 }

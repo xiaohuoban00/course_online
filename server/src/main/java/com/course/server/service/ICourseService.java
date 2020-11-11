@@ -5,6 +5,8 @@ import com.course.server.dto.CourseDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.SortDto;
 
+import java.util.List;
+
 
 public interface ICourseService {
 
@@ -59,4 +61,12 @@ public interface ICourseService {
      * @param sortDto
      */
     void sort(SortDto sortDto);
+
+    /**
+     * 新课列表查询，只查3条
+     *
+     * @param pageDto
+     * @return
+     */
+    List<CourseDto> listNew(PageDto<CourseDto> pageDto);
 }

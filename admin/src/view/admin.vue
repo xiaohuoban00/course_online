@@ -609,19 +609,19 @@ export default {
     $.getScript('/ace/assets/js/ace.min.js');
     _this.loginUser =  Tool.getLoginUser();
 
-    if (!_this.hasResourceRouter(_this.$route.name)) {
+    /*if (!_this.hasResourceRouter(_this.$route.name)) {
       _this.$router.push("/login");
-    }
+    }*/
   },
   //用于监听Vue实例中数据的变动
   watch: {
     $route: {
       handler: function (val, oldVal) {
         let _this = this;
-        if (!_this.hasResourceRouter(val.name)) {
+        /*if (!_this.hasResourceRouter(val.name)) {
           _this.$router.push("/login");
           return;
-        }
+        }*/
         //页面加载完成后执行
         _this.$nextTick(function () {
           _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar")
