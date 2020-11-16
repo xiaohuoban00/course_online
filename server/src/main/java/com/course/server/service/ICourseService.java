@@ -1,9 +1,6 @@
 package com.course.server.service;
 
-import com.course.server.dto.CourseContentDto;
-import com.course.server.dto.CourseDto;
-import com.course.server.dto.PageDto;
-import com.course.server.dto.SortDto;
+import com.course.server.dto.*;
 
 import java.util.List;
 
@@ -15,7 +12,7 @@ public interface ICourseService {
      *
      * @param pageDto
      */
-    void list(PageDto<CourseDto> pageDto);
+    void list(CoursePageDto pageDto);
 
     /**
      * 新增,如存在则更新
@@ -69,4 +66,12 @@ public interface ICourseService {
      * @return
      */
     List<CourseDto> listNew(PageDto<CourseDto> pageDto);
+
+    /**
+     * 查找某一课程，供web模块用，只能查已发布的
+     *
+     * @param id
+     * @return
+     */
+    CourseDto findCourse(String id);
 }

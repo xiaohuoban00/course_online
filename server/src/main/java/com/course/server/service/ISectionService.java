@@ -4,6 +4,8 @@ import com.course.server.dto.SectionDto;
 import com.course.server.dto.PageDto;
 import com.course.server.dto.SectionPageDto;
 
+import java.util.List;
+
 
 public interface ISectionService {
 
@@ -27,4 +29,12 @@ public interface ISectionService {
      * @param id
      */
     void delete(String id);
+
+    /**
+     * 根据课程id查询小节
+     *
+     * @param courseId
+     * @return
+     */
+    List<SectionDto> listByCourse(String courseId);
 }

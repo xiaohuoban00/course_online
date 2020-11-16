@@ -8,7 +8,7 @@
           技术与业务深度融合，电商项目前后端开发的教科书级别案例
           赋能Java从业者拥有更强的职场适应力和工作竞争力</p>
         <p>
-          <a href="#" class="btn btn-primary my-2 p-3 font-weight-bold">点击进入所有课程</a>
+          <router-link to="/list" class="btn btn-primary my-2 p-3 font-weight-bold">点击进入所有课程</router-link>
         </p>
       </div>
     </section>
@@ -16,17 +16,21 @@
     <div class="album py-5 bg-light">
       <div class="container">
         <div class="title1">最新上线</div>
-        <div class="row" v-for="(course,index) in news" :key="index">
-          <the-course v-bind:course="course"></the-course>
+        <div class="row" >
+          <div class="col-md-4" v-for="(course,index) in news" :key="index">
+            <the-course v-bind:course="course"></the-course>
+          </div>
         </div>
 
         <hr>
 
 
         <div class="title2">好课推荐</div>
-        <div class="row" v-for="(course,index) in news" :key="index">
-          <the-course v-bind:course="course"></the-course>
-        </div>+
+        <div class="row" >
+          <div class="col-md-4" v-for="(course,index) in news" :key="index">
+            <the-course v-bind:course="course"></the-course>
+          </div>
+        </div>
 
       </div>
     </div>

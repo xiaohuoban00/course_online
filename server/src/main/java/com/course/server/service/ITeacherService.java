@@ -36,4 +36,12 @@ public interface ITeacherService {
      * @return
      */
     List<TeacherDto> all();
+
+    /**
+     * 根据id查询
+     *
+     * @param teacherId
+     * @return
+     */
+    TeacherDto findById(String teacherId);
 }

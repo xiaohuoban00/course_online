@@ -35,7 +35,8 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
         }
         if (path.contains("/system/admin/user/login")
                 || path.contains("/system/admin/user/logout")
-                || path.contains("/system/admin/kaptcha")) {
+                || path.contains("/system/admin/kaptcha")
+                || path.contains("/file/admin/oss-simple")) {
             return chain.filter(exchange);
         }
         String token = exchange.getRequest().getHeaders().getFirst("token");
@@ -48,6 +49,7 @@ public class LoginAdminGatewayFilter implements GatewayFilter, Ordered {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         } else {
+            redisTemplate.opsForValue().set(token,JSON.toJSONString(object),3600,TimeUnit.SECONDS);
             //校验权限
             /*boolean exist = false;
             JSONObject loginUserDto = JSON.parseObject(String.valueOf(object));

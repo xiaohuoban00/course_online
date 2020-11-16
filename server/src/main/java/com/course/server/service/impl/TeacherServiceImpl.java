@@ -70,4 +70,10 @@ public class TeacherServiceImpl implements ITeacherService {
         List<Teacher> teacherList = teacherMapper.selectByExample(example);
         return CopyUtil.copyList(teacherList,TeacherDto.class);
     }
+
+    @Override
+    public TeacherDto findById(String teacherId) {
+        Teacher teacher = teacherMapper.selectByPrimaryKey(teacherId);
+        return CopyUtil.copy(teacher,TeacherDto.class);
+    }
 }

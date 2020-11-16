@@ -75,4 +75,11 @@ public class SectionServiceImpl implements ISectionService {
         sectionMapper.deleteByPrimaryKey(id);
     }
 
+    @Override
+    public List<SectionDto> listByCourse(String courseId) {
+        Example example = new Example(Section.class);
+        example.createCriteria().andEqualTo("courseId",courseId);
+        List<Section> sectionList = sectionMapper.selectByExample(example);
+        return CopyUtil.copyList(sectionList,SectionDto.class);
+    }
 }

@@ -4,6 +4,8 @@ import com.course.server.dto.ChapterDto;
 import com.course.server.dto.ChapterPageDto;
 import com.course.server.dto.PageDto;
 
+import java.util.List;
+
 /**
  * @author zmq
  * @date 2020/10/10 5:58 下午
@@ -30,4 +32,12 @@ public interface IChapterService {
      * @param id
      */
     void delete(String id);
+
+    /**
+     * 根据课程查询大章
+     *
+     * @param courseId
+     * @return
+     */
+    List<ChapterDto> listByCourse(String courseId);
 }

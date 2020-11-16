@@ -70,4 +70,12 @@ public class ChapterServiceImpl implements IChapterService {
     public void delete(String id) {
         chapterMapper.deleteByPrimaryKey(id);
     }
+
+    @Override
+    public List<ChapterDto> listByCourse(String courseId) {
+        Example example = new Example(Chapter.class);
+        example.createCriteria().andEqualTo("courseId",courseId);
+        List<Chapter> chapterList = chapterMapper.selectByExample(example);
+        return CopyUtil.copyList(chapterList,ChapterDto.class);
+    }
 }

@@ -7,8 +7,7 @@ import com.course.server.enmus.CourseStatusEnum;
 import com.course.server.mapper.CategoryMapper;
 import com.course.server.mapper.CourseContentMapper;
 import com.course.server.mapper.CourseMapper;
-import com.course.server.service.ICourseCategoryService;
-import com.course.server.service.ICourseService;
+import com.course.server.service.*;
 import com.course.server.utils.CopyUtil;
 import com.course.server.utils.UuidUtil;
 import com.github.pagehelper.PageHelper;
@@ -34,16 +33,22 @@ public class CourseServiceImpl implements ICourseService {
     @Resource
     private CourseContentMapper courseContentMapper;
 
+    @Resource
+    private ISectionService sectionService;
+
+    @Resource
+    private ITeacherService teacherService;
+
+    @Resource
+    private IChapterService chapterService;
+
     @Override
-    public void list(PageDto<CourseDto> pageDto) {
-        Example example = new Example(Course.class);
-        example.orderBy("id").desc();
+    public void list(CoursePageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
-        List<Course> courseList = courseMapper.selectByExample(example);
-        PageInfo<Course> pageInfo = new PageInfo<>(courseList);
+        List<CourseDto> courseList = courseMapper.list(pageDto);
+        PageInfo<CourseDto> pageInfo = new PageInfo<>(courseList);
         pageDto.setTotal(pageInfo.getTotal());
-        List<CourseDto> courseDtoList = CopyUtil.copyList(courseList, CourseDto.class);
-        pageDto.setList(courseDtoList);
+        pageDto.setList(courseList);
     }
 
 
@@ -119,10 +124,39 @@ public class CourseServiceImpl implements ICourseService {
     @Override
     public List<CourseDto> listNew(PageDto<CourseDto> pageDto) {
         Example example = new Example(Course.class);
-        example.orderBy("createAt").desc();
+        example.orderBy("createdAt").desc();
         example.createCriteria().andEqualTo("status", CourseStatusEnum.PUBLISH.getCode());
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         List<Course> courseList = courseMapper.selectByExample(example);
         return CopyUtil.copyList(courseList,CourseDto.class);
+    }
+
+    @Override
+    public CourseDto findCourse(String id) {
+        Course course = courseMapper.selectByPrimaryKey(id);
+        if (course == null || !CourseStatusEnum.PUBLISH.getCode().equals(course.getStatus())) {
+            return null;
+        }
+        CourseDto courseDto = CopyUtil.copy(course, CourseDto.class);
+
+        // 查询内容
+        CourseContent content = courseContentMapper.selectByPrimaryKey(id);
+        if (content != null) {
+            courseDto.setContent(content.getContent());
+        }
+
+        // 查找讲师信息
+        TeacherDto teacherDto = teacherService.findById(courseDto.getTeacherId());
+        courseDto.setTeacher(teacherDto);
+
+        // 查找章信息
+        List<ChapterDto> chapterDtoList = chapterService.listByCourse(id);
+        courseDto.setChapters(chapterDtoList);
+
+        // 查找节信息
+        List<SectionDto> sectionDtoList = sectionService.listByCourse(id);
+        courseDto.setSections(sectionDtoList);
+
+        return courseDto;
     }
 }
