@@ -13,13 +13,13 @@ public class ServerGenerator {
 
     static String toServicePath = "server/src/main/java/com/course/server/service/";
     static String toServiceImplPath = "server/src/main/java/com/course/server/service/impl/";
-    static String toControllerPath = "system/src/main/java/com/course/system/controller/admin/";
+    static String toControllerPath = "business/src/main/java/com/course/business/controller/admin/";
     static String toMapperPath = "server/src/main/java/com/course/server/mapper/";
 
     public static void main(String[] args) throws Exception{
-        String Domain = "RoleUser";
-        String domain = "roleUser";
-        String module = "system";
+        String Domain = "Member";
+        String domain = "member";
+        String module = "business";
         Map<String,Object> map = new HashMap<>();
         map.put("Domain",Domain);
         map.put("domain",domain);

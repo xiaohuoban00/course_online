@@ -21,13 +21,11 @@ public class VodController {
 
     private static final Logger LOG = LoggerFactory.getLogger(FileController.class);
 
-    @Value("${vod.accessKeyId}")
+    @Value("${oss.accessKeyId}")
     private String accessKeyId;
 
-    @Value("${vod.accessKeySecret}")
+    @Value("${oss.accessKeySecret}")
     private String accessKeySecret;
-
-    public static final String BUSINESS_NAME = "VOD";
 
     @RequestMapping(value = "/get-auth/{vod}", method = RequestMethod.GET)
     public ResponseDto getAuth(@PathVariable String vod) throws ClientException {
