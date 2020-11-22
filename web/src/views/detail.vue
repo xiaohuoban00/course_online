@@ -120,6 +120,7 @@ export default {
     let _this = this;
     _this.id = _this.$route.query.id;
     _this.findCourse();
+    _this.getEnroll();
   },
   methods: {
     findCourse() {
@@ -175,6 +176,50 @@ export default {
         }
       }
       _this.$refs.modalPlayer.playVod(section.vod);
+    },
+    /**
+     * 报名
+     */
+    enroll() {
+      let _this = this;
+      let loginMember = Tool.getLoginMember();
+      if (Tool.isEmpty(loginMember)) {
+        Toast.warning("请先登录");
+        return;
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member-course/enroll', {
+        courseId: _this.course.id,
+        memberId: loginMember.id
+      }).then((response)=>{
+        let resp = response.data;
+        if (resp.success) {
+          _this.memberCourse = resp.content;
+          Toast.success("报名成功！");
+        } else {
+          Toast.warning(resp.message);
+        }
+      });
+    },
+
+    /**
+     * 获取报名
+     */
+    getEnroll() {
+      let _this = this;
+      let loginMember = Tool.getLoginMember();
+      if (Tool.isEmpty(loginMember)) {
+        console.log("未登录");
+        return;
+      }
+      _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member-course/get-enroll', {
+        courseId: _this.course.id,
+        memberId: loginMember.id
+      }).then((response)=>{
+        let resp = response.data;
+        if (resp.success) {
+          _this.memberCourse = resp.content || {};
+        }
+      });
     },
   }
 }

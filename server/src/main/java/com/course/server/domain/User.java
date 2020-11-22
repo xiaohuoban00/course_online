@@ -4,8 +4,6 @@ import javax.persistence.Id;
 
 public class User {
     
-    public final static String LOGIN_USER = "LOGIN_USER";
-    
     @Id
     private String id;
 
