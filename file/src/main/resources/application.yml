@@ -12,7 +12,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: http://admin:admin@localhost:8761/eureka
 # 本地文件路径及地址配置
 file:
   path: /Users/zengmingqi/Pictures/
